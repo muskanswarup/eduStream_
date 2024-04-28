@@ -7,6 +7,7 @@ import { courseRouter } from "./routes/course.route.js";
 import { userRouter } from "./routes/user.route.js";
 import { contentRouter } from "./routes/content.route.js";
 import config from "./utils/config.js";
+import { tagRouter } from "./routes/tag.route.js";
 
 const app = express();
 
@@ -26,6 +27,7 @@ app.use("/api", authRouter);
 app.use("/course", courseRouter);
 app.use("/user", userRouter);
 app.use("/content", contentRouter);
+app.use("/tag", tagRouter);
 
 app.use(middleware.errorHandlerMiddleware);
 

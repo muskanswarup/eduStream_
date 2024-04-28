@@ -36,7 +36,11 @@ const courseSchema = new mongoose.Schema({
         type: mongoose.Schema.Types.ObjectId,
         ref: "Tag"
     }
-  ]
+  ],
+
+  completion: {
+    type: Boolean,
+  }
 });
 
 const courseModel = mongoose.model("Course", courseSchema);

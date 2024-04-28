@@ -7,23 +7,24 @@ import Signup from "./components/Signup/Signup";
 import Profile from "./components/Profile/Profile";
 import MyCourses from "./components/MyCourses/MyCourses";
 import Categories from "./components/Categories/Categories";
+import PrivateRoute from "./components/PrivateRoute/PrivateRoute";
 
 function App() {
   return (
     <>
       <BrowserRouter>
         <Navbar />
-        <main className="p-4 overflow-y-auto mx-auto md:mx-12 lg:mx-24 xl:mx-44 2xl:mx-60"> 
-        {/*  */}
+        <main className="p-4 overflow-y-auto mx-auto lg:mx-16 xl:mx-32 2xl:mx-40">
+          {/*  */}
           <Routes>
-            <Route path="/" element={<Home />} />
             <Route path="/login" element={<Login />} />
             <Route path="/signup" element={<Signup />} />
-            <Route path="/mycourses" element={<MyCourses />} />
-            <Route path="/categories" element={<Categories />} />
-            {/* <Route element={<PrivateRoute />}> */}
+            <Route element={<PrivateRoute />}>
+              <Route path="/categories" element={<Categories />} />
+              <Route path="/" element={<Home />} />
+              <Route path="/mycourses" element={<MyCourses />} />
               <Route path="/profile" element={<Profile />} />
-            {/* </Route> */}
+            </Route>
           </Routes>
         </main>
       </BrowserRouter>

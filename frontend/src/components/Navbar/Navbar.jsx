@@ -1,12 +1,17 @@
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { logoutUser } from "../../redux/user/userSlice";
 import { useDispatch } from "react-redux";
 
 const Navbar = () => {
   const dispatch = useDispatch();
+  const navigate = useNavigate();
+
+  const handleLogOut = () => {
+    dispatch(logoutUser());
+    navigate("/login");
+  };
   return (
-    <nav className="bg-[--ac-fg] flex items-center justify-between p-4 mx-auto border md:mx-12 lg:mx-24 xl:mx-44 2xl:mx-60">
-      {/*  */}
+    <nav className="bg-[--ac-fg] flex items-center justify-between p-4 mx-auto lg:mx-16 xl:mx-32 2xl:mx-40 border">
       <div className="">
         <h3 className="text-2xl font-semibold">
           <span className="text-[--ac-dark]">Edu</span>
@@ -22,8 +27,9 @@ const Navbar = () => {
           <Link to="/categories">
             <li>Browse Categories</li>
           </Link>
-          <li className="hover:cursor-pointer"
-          onClick={() => dispatch(logoutUser())}>LogOut</li>
+          <li className="hover:cursor-pointer" onClick={handleLogOut}>
+            LogOut
+          </li>
         </ul>
         <Link to="/profile">
           <div className="profile h-12 w-12 bg-gray-300 rounded-full">

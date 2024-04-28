@@ -40,7 +40,6 @@ export default function Home() {
       setSelectedCourse(courseId);
     }
   };
-
   return (
     <div>
       {selectedCourse ? (
@@ -73,7 +72,7 @@ export default function Home() {
       ) : (
         <>
           <h2 className="text-3xl font-bold">All Courses</h2>
-          <div className="grid grid-cols-4 gap-8 mt-8 items-start">
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-8 mt-8 items-start">
             {courseData.length > 0 && courseData.map((course) => (
               <button
                 key={course._id}
@@ -94,7 +93,7 @@ export default function Home() {
                     <p className="line-clamp-3 text-sm">{course.description}</p>
                   </div>
                   <div className="mt-4">
-                    <h3 className="font-semibold text-left">
+                    <h3 className="text-left text-sm">
                       {course.instructor}
                     </h3>
                   </div>
