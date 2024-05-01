@@ -4,7 +4,7 @@ import { userModel } from "../models/user.model.js";
 
 const getAllCourses = async (req, res, next) => {
   try {
-    const allCourses = await courseModel.find({}).populate('course_content');
+    const allCourses = await courseModel.find({}).populate("course_content").populate("instructor").populate("tags");
     if (allCourses.length === 0) {
       return res.status(200).json({ message: "There are no courses" });
     }
@@ -17,24 +17,25 @@ const getAllCourses = async (req, res, next) => {
 const getMyCourses = async (req, res, next) => {
   try {
     const userId = req.user.id;
-    const user = await userModel.findById(userId).populate('owned_courses').populate('enrolled_courses');
+    const user = await userModel
+      .findById(userId)
+      .populate("owned_courses")
+      .populate("enrolled_courses");
 
     const ownedCourses = user.owned_courses;
     const enrolledCourses = user.enrolled_courses;
-    
-    if(user.role === 'instructor') res.status(200).json(ownedCourses)
-    if(user.role === 'enduser') res.status(200).json(enrolledCourses)
+
+    if (user.role === "instructor") res.status(200).json(ownedCourses);
+    if (user.role === "enduser") res.status(200).json(enrolledCourses);
   } catch (error) {
     next(error);
   }
 };
 
-
-
 const getCourse = async (req, res, next) => {
   try {
     const id = req.params.id;
-    const course = await courseModel.findById(id);
+    const course = await courseModel.findById(id).populate("course_content");
     res.status(200).json(course);
   } catch (error) {
     next(error);
@@ -44,11 +45,11 @@ const getCourse = async (req, res, next) => {
 const createCourse = async (req, res, next) => {
   try {
     let tagModels = [];
-    
+
     if (req.body.tags && req.body.tags.length > 0) {
       for (const tag of req.body.tags) {
         const existingTag = await tagModel.findOne({ title: tag });
-        
+
         if (existingTag) {
           tagModels.push(existingTag._id);
         } else {
@@ -65,7 +66,7 @@ const createCourse = async (req, res, next) => {
       enrolled_users: [],
       course_content: [],
       tags: tagModels || [],
-      completion: false  
+      completion: false,
     });
 
     const userId = req.user.id;
@@ -81,7 +82,7 @@ const createCourse = async (req, res, next) => {
       message: "Course created successfully",
       course: newCourse,
       user: user,
-      tagModels: tagModels
+      tagModels: tagModels,
     });
   } catch (error) {
     next(error);
@@ -116,7 +117,7 @@ const completeCourse = async (req, res, next) => {
     const userId = req.user.id;
     const courseId = req.params.id;
 
-    if(req.user.role === 'instructor'){
+    if (req.user.role === "instructor") {
       const user = await userModel.findByIdAndUpdate(
         userId,
         {
@@ -138,7 +139,7 @@ const completeCourse = async (req, res, next) => {
         user: user,
         course: course,
       });
-    }else{
+    } else {
       const user = await userModel.findByIdAndUpdate(
         userId,
         {
@@ -147,7 +148,7 @@ const completeCourse = async (req, res, next) => {
         },
         { new: true }
       );
-  
+
       const course = await courseModel.findByIdAndUpdate(
         courseId,
         {
@@ -155,7 +156,7 @@ const completeCourse = async (req, res, next) => {
         },
         { new: true }
       );
-  
+
       res.status(200).json({
         message: "Course marked as completed successfully",
         user: user,

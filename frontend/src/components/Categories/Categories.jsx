@@ -1,10 +1,12 @@
 import axios from "axios";
 import React, { useEffect, useState } from "react";
+import { useNavigate } from "react-router-dom";
 
 export default function Categories() {
   const [courseData, setCourseData] = useState([]);
   const [tagsData, setTagsData] = useState([]);
   const [selectedTag, setSelectedTag] = useState([]);
+  const navigate = useNavigate();
 
   useEffect(() => {
     const fetchCourses = async () => {
@@ -55,86 +57,108 @@ export default function Categories() {
       setSelectedTag([...selectedTag, tagId]);
     }
   };
+
+  const handleCourseClick = (courseId) => {
+    navigate(`/${courseId}`);
+  };
+
   return (
-    <div className="">
-      <h2 className="text-3xl font-bold">Categories</h2>
-      <div className="flex mt-4">
+    <div className="m-4 flex flex-col gap-4">
+      <h2 className="text-3xl font-semibold mx-4">Categories</h2>
+      <div className="flex">
         {tagsData.map((tag) => (
           <button
             key={tag._id}
             onClick={() => handleTagClick(tag._id)}
-            className={`mr-4 px-4 py-2 rounded-md ${
+            className={`mx-4 px-3 py-1 rounded-sm text-sm ${
               selectedTag.includes(tag._id)
-                ? "bg-blue-500 text-white"
-                : "bg-gray-300 text-gray-700"
+                ? "bg-purple-700 text-white"
+                : "bg-gray-200 text-gray-700"
             }`}
           >
             {tag.title}
           </button>
         ))}
       </div>
-      <h2 className="text-3xl font-bold mt-8">Courses</h2>
+      <h2 className="text-3xl font-semibold mx-4">Courses</h2>
       {selectedTag.length > 0 ? (
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-8 mt-8 items-start">
+        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 xl:grid-cols-4 2xl:grid-cols-5 gap-4 items-start">
           {courseData
             .filter((course) =>
-              selectedTag.some((tag) => course.tags.includes(tag))
+              selectedTag.some((tag) =>
+                course.tags.map((tag) => tag._id).includes(tag)
+              )
             )
             .map((course) => (
-              <button key={course._id}>
-                <div className="rounded-lg bg-gray-300 p-4">
-                  <div className="h-64 w-full rounded-lg bg-gray-800">
-                    <img
-                      src="https://d15cw65ipctsrr.cloudfront.net/14/4dcbc397754fb880094f4ebde1fdb5/Java-Full-Stack-Developer-specialization-2-.png"
-                      alt="course-display"
-                      className="object-cover h-full w-full rounded-lg"
-                      height={300}
-                      width={300}
-                    />
+              <button
+                key={course._id}
+                onClick={() => handleCourseClick(course._id)}
+                className="cursor-pointer flex flex-col m-4 gap-2 "
+              >
+                <img
+                  src="/cutepfp.jpg"
+                  alt="course-display"
+                  className="object-cover rounded-md hover:opacity-90 h-full w-full"
+                />
+                <div className="flex flex-col gap-2">
+                  <div className="">
+                    <h3 className="font-semibold text-lg text-left">
+                      {course.title}
+                    </h3>
+                    <p className="line-clamp-3 text-sm text-left">
+                      {course.description}
+                    </p>
                   </div>
-                  <div className="mt-2 text-left">
-                    <h3 className="font-bold text-lg">{course.title}</h3>
-                    <p className="line-clamp-3 text-sm">{course.description}</p>
-                  </div>
-                  <div className="mt-4">
-                    <h3 className="text-sm text-left">{course.instructor}</h3>
+                  <h3 className="text-sm text-left">
+                    {course.instructor.name}
+                  </h3>
+                  <div className="flex flex-wrap gap-2">
+                    {course.tags.map((tag) => (
+                      <button
+                        key={tag._id}
+                        className="inline-flex items-center rounded-[4px] border px-2.5 py-0.5 text-xs font-semibold bg-purple-700 text-white"
+                      >
+                        {tag.title}
+                      </button>
+                    ))}
                   </div>
                 </div>
               </button>
             ))}
         </div>
       ) : (
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-8 mt-8 items-start">
+        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 xl:grid-cols-4 2xl:grid-cols-5 gap-4 items-start">
           {courseData.length > 0 &&
             courseData.map((course) => (
               <button
                 key={course._id}
                 onClick={() => handleCourseClick(course._id)}
+                className="cursor-pointer flex flex-col m-4 gap-2 "
               >
-                <div className="rounded-lg bg-gray-300 p-4">
-                  <div className="h-64 w-full rounded-lg bg-gray-800">
-                    <img
-                      src="https://d15cw65ipctsrr.cloudfront.net/14/4dcbc397754fb880094f4ebde1fdb5/Java-Full-Stack-Developer-specialization-2-.png"
-                      alt="course-display"
-                      className="object-cover h-full w-full rounded-lg"
-                      height={300}
-                      width={300}
-                    />
+                <img
+                  src="/cutepfp.jpg"
+                  alt="course-display"
+                  className="object-cover rounded-md hover:opacity-90 h-full w-full"
+                />
+                <div className="flex flex-col gap-2">
+                  <div className="">
+                    <h3 className="font-semibold text-lg text-left">
+                      {course.title}
+                    </h3>
+                    <p className="line-clamp-3 text-sm text-left">
+                      {course.description}
+                    </p>
                   </div>
-                  <div className="mt-2 text-left">
-                    <h3 className="font-bold text-lg">{course.title}</h3>
-                    <p className="line-clamp-3 text-sm">{course.description}</p>
-                  </div>
-                  <div className="mt-4">
-                    <h3 className="text-left text-sm">{course.instructor}</h3>
-                  </div>
-                  <div className="mt-4 flex flex-wrap gap-2">
-                    {course.tags.map((tag, index) => (
+                  <h3 className="text-sm text-left">
+                    {course.instructor.name}
+                  </h3>
+                  <div className="flex flex-wrap gap-2">
+                    {course.tags.map((tag) => (
                       <button
-                        key={index}
-                        className="bg-gray-500 text-white px-2 py-1 rounded-md text-sm"
+                        key={tag._id}
+                        className="inline-flex items-center rounded-[4px] border px-2.5 py-0.5 text-xs font-semibold bg-purple-700 text-white"
                       >
-                        {tag}
+                        {tag.title}
                       </button>
                     ))}
                   </div>

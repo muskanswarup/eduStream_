@@ -1,9 +1,10 @@
 import React, { useEffect, useState } from "react";
 import axios from "axios";
+import { useNavigate } from "react-router-dom";
 
 export default function Home() {
   const [courseData, setCourseData] = useState([]);
-  const [selectedCourse, setSelectedCourse] = useState("");
+  const navigate = useNavigate();
 
   useEffect(() => {
     const fetchCourses = async () => {
@@ -29,90 +30,46 @@ export default function Home() {
     fetchCourses();
   }, []);
 
-  const backToCourses = () => {
-    setSelectedCourse(null);
+  const handleCourseClick = (courseId) => {
+    navigate(`/${courseId}`);
   };
 
-  const handleCourseClick = (courseId) => {
-    if (selectedCourse === courseId) {
-      setSelectedCourse(null);
-    } else {
-      setSelectedCourse(courseId);
-    }
-  };
   return (
-    <div>
-      {selectedCourse ? (
-        <div className="col-span-4">
-          <h2 className="text-3xl font-bold">Course Content</h2>
-          <button
-            className="px-2 py-0.5 bg-[--ac-light] text-[--ac-fg] rounded-md mt-2"
-            onClick={backToCourses}
-          >
-            (Go Back to Courses)
-          </button>
-          <div className="grid grid-cols-4 gap-8 mt-4">
-            {courseData
-              .find((course) => course._id === selectedCourse)
-              ?.course_content.map((content) => (
-                <div key={content._id} className="h-52 rounded-lg">
-                  <iframe
-                    className="object-cover h-full w-full rounded-lg"
-                    title={content.title}
-                    width="560"
-                    height="315"
-                    src={content.url}
-                    allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
-                    allowFullScreen
-                  ></iframe>
+    <div className="m-4 flex flex-col gap-4">
+      <h2 className="text-3xl font-semibold mx-4">All Courses</h2>
+      <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 xl:grid-cols-4 2xl:grid-cols-5 gap-4 items-start">
+        {courseData.length > 0 &&
+          courseData.map((course) => (
+            <div
+              key={course._id}
+              onClick={() => handleCourseClick(course._id)}
+              className="cursor-pointer flex flex-col m-4 gap-2 "
+            >
+              <img
+                src="/cutepfp.jpg"
+                alt="course-display"
+                className="object-cover rounded-md hover:opacity-90 h-full w-full"
+              />
+              <div className="flex flex-col gap-2">
+                <div className="">
+                  <h3 className="font-semibold text-lg">{course.title}</h3>
+                  <p className="line-clamp-3 text-sm">{course.description}</p>
                 </div>
-              ))}
-          </div>
-        </div>
-      ) : (
-        <>
-          <h2 className="text-3xl font-bold">All Courses</h2>
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-8 mt-8 items-start">
-            {courseData.length > 0 && courseData.map((course) => (
-              <button
-                key={course._id}
-                onClick={() => handleCourseClick(course._id)}
-              >
-                <div className="rounded-lg bg-gray-300 p-4">
-                  <div className="h-64 w-full rounded-lg bg-gray-800">
-                    <img
-                      src="https://d15cw65ipctsrr.cloudfront.net/14/4dcbc397754fb880094f4ebde1fdb5/Java-Full-Stack-Developer-specialization-2-.png"
-                      alt="course-display"
-                      className="object-cover h-full w-full rounded-lg"
-                      height={300}
-                      width={300}
-                    />
-                  </div>
-                  <div className="mt-2 text-left">
-                    <h3 className="font-bold text-lg">{course.title}</h3>
-                    <p className="line-clamp-3 text-sm">{course.description}</p>
-                  </div>
-                  <div className="mt-4">
-                    <h3 className="text-left text-sm">
-                      {course.instructor}
-                    </h3>
-                  </div>
-                  <div className="mt-4 flex flex-wrap gap-2">
-                    {course.tags.map((tag, index) => (
-                      <button
-                        key={index}
-                        className="bg-gray-500 text-white px-2 py-1 rounded-md text-sm"
-                      >
-                        {tag}
-                      </button>
-                    ))}
-                  </div>
+                <h3 className="text-sm">{course.instructor.name}</h3>
+                <div className="flex flex-wrap gap-2">
+                  {course.tags.map((tag) => (
+                    <button
+                      key={tag._id}
+                      className="inline-flex items-center rounded-[4px] border px-2.5 py-0.5 text-xs font-semibold bg-purple-700 text-white"
+                    >
+                      {tag.title}
+                    </button>
+                  ))}
                 </div>
-              </button>
-            ))}
-          </div>
-        </>
-      )}
+              </div>
+            </div>
+          ))}
+      </div>
     </div>
   );
 }
