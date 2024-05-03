@@ -4,7 +4,11 @@ import { userModel } from "../models/user.model.js";
 
 const getAllCourses = async (req, res, next) => {
   try {
-    const allCourses = await courseModel.find({}).populate("course_content").populate("instructor").populate("tags");
+    const allCourses = await courseModel
+      .find({})
+      .populate("course_content")
+      .populate("instructor")
+      .populate("tags");
     if (allCourses.length === 0) {
       return res.status(200).json({ message: "There are no courses" });
     }

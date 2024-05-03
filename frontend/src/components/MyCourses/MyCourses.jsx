@@ -103,169 +103,122 @@ export default function MyCourses() {
     setTags("");
     setTagList([]);
   };
-  console.log(courseName);
-  console.log(courseDescription);
-  console.log(tags);
-  console.log(tagList);
+  
   return (
-    <div className="m-4 flex flex-col gap-4">
-      <button
-        onClick={() => setShowAddCourse(!showAddCourse)}
-        className="border px-2 py-2 hover:bg-gray-300 rounded-md"
-      >
-        Add a Course
-      </button>
-      {showAddCourse && (
-        <form onSubmit={handleSubmit}>
-          <div>
-            <label htmlFor="courseName">Course Name:</label>
-            <input
-              type="text"
-              id="courseName"
-              value={courseName}
-              onChange={(e) => setCourseName(e.target.value)}
-              required
-              className="bg-slate-300 border rounded-md"
-            />
-          </div>
-          <div>
-            <label htmlFor="courseDescription">Course Description:</label>
-            <textarea
-              id="courseDescription"
-              value={courseDescription}
-              onChange={(e) => setCourseDescription(e.target.value)}
-              required
-              className="bg-slate-300 border rounded-md"
-            />
-          </div>
-          <div>
-            <label htmlFor="tags">Tags:</label>
-            <input
-              type="text"
-              id="tags"
-              value={tags}
-              onChange={handleTagChange}
-              placeholder="Enter tags separated by comma"
-              className="bg-slate-300 border rounded-md"
-            />
-            <button type="button" onClick={handleTagAdd}>
-              Add Tag
-            </button>
-          </div>
-          {tagList.length > 0 && (
-            <div>
-              <p>Selected Tags:</p>
-              <ul>
-                {tagList.map((tag, index) => (
-                  <li key={index}>
-                    {tag}{" "}
-                    <button
-                      type="button"
-                      onClick={() => handleTagRemove(index)}
-                    >
-                      Remove
-                    </button>
-                  </li>
-                ))}
-              </ul>
-            </div>
-          )}
-          <button type="submit">Submit</button>
-        </form>
-      )}
-      <h2 className="text-3xl font-semibold mx-4">Completed Courses</h2>
-      <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 xl:grid-cols-4 2xl:grid-cols-5 gap-4 items-start">
-        {completedCourses &&
-          completedCourses.map((course) => (
-            <button
-              key={course._id}
-              onClick={() => handleCourseClick(course._id)}
-              className="cursor-pointer flex flex-col m-4 gap-2 "
-            >
-              <img
-                src="/cutepfp.jpg"
-                alt="course-display"
-                className="object-cover rounded-md hover:opacity-90 h-full w-full"
-              />
-
-              <div className="flex flex-col gap-2">
-                <div className="">
-                  <h3 className="font-semibold text-lg text-left">
-                    {course.title}
-                  </h3>
-                  <p className="line-clamp-3 text-sm text-left">
-                    {course.description}
-                  </p>
-                </div>
-                <h3 className="text-sm text-left">{currentUser.name}</h3>
-              </div>
-            </button>
-          ))}
-      </div>
-
-      <h2 className="text-3xl font-semibold mx-4">Pending Courses</h2>
-      {currentUser.role === "instructor" ? (
-        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 xl:grid-cols-4 2xl:grid-cols-5 gap-4 items-start">
-          {pendingCoursesInstructor.map((course) => (
-            <button
-              key={course._id}
-              onClick={() => handleCourseClick(course._id)}
-              className="cursor-pointer flex flex-col m-4 gap-2 "
-            >
-              <img
-                src="/cutepfp.jpg"
-                alt="course-display"
-                className="object-cover rounded-md hover:opacity-90 h-full w-full"
-              />
-
-              <div className="flex flex-col gap-2">
-                <div className="">
-                  <h3 className="font-semibold text-lg text-left">
-                    {course.title}
-                  </h3>
-                  <p className="line-clamp-3 text-sm text-left">
-                    {course.description}
-                  </p>
-                </div>
-                <h3 className="text-sm text-left">{currentUser.name}</h3>
-              </div>
-            </button>
-          ))}
-        </div>
-      ) : (
-        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 xl:grid-cols-4 2xl:grid-cols-5 gap-4 items-start">
-          {pendingCoursesEnduser.map((course) => (
-            <button
-              key={course._id}
-              onClick={() => handleCourseClick(course._id)}
-              className="cursor-pointer flex flex-col m-4 gap-2 "
-            >
-              <img
-                src="/cutepfp.jpg"
-                alt="course-display"
-                className="object-cover rounded-md hover:opacity-90 h-full w-full"
-              />
-
-              <div className="flex flex-col gap-2">
-                <div className="">
-                  <h3 className="font-semibold text-lg text-left">
-                    {course.title}
-                  </h3>
-                  <p className="line-clamp-3 text-sm text-left">{course.description}</p>
-                </div>
-                <h3 className="text-sm text-left">{currentUser.name}</h3>
-              </div>
-            </button>
-          ))}
-        </div>
-      )}
-
-      {currentUser.role === "instructor" ? (
+    <div className="m-4 flex flex-col gap-2">
+      {currentUser.role === "instructor" && (
         <>
-          <h2 className="text-3xl font-semibold mx-4">Owned Courses</h2>
-          <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 xl:grid-cols-4 2xl:grid-cols-5 gap-4 items-start">
-            {ownedCourses &&
-              ownedCourses.map((course) => (
+          <button
+            onClick={() => setShowAddCourse(!showAddCourse)}
+            className="border hover:bg-purple-700 rounded-lg hover:text-white font-semibold bg-gray-100 border-gray-300 md:rounded-[4px] text-sm px-3 shadow-sm h-9"
+          >
+            Add a Course
+          </button>
+          {showAddCourse && (
+            <form onSubmit={handleSubmit}>
+              <div>
+                <label htmlFor="courseName">Course Name:</label>
+                <input
+                  type="text"
+                  id="courseName"
+                  value={courseName}
+                  onChange={(e) => setCourseName(e.target.value)}
+                  required
+                  className="bg-slate-300 border rounded-md"
+                />
+              </div>
+              <div>
+                <label htmlFor="courseDescription">Course Description:</label>
+                <textarea
+                  id="courseDescription"
+                  value={courseDescription}
+                  onChange={(e) => setCourseDescription(e.target.value)}
+                  required
+                  className="bg-slate-300 border rounded-md"
+                />
+              </div>
+              <div>
+                <label htmlFor="tags">Tags:</label>
+                <input
+                  type="text"
+                  id="tags"
+                  value={tags}
+                  onChange={handleTagChange}
+                  placeholder="Enter tags separated by comma"
+                  className="bg-slate-300 border rounded-md"
+                />
+                <button type="button" onClick={handleTagAdd}>
+                  Add Tag
+                </button>
+              </div>
+              {tagList.length > 0 && (
+                <div>
+                  <p>Selected Tags:</p>
+                  <ul>
+                    {tagList.map((tag, index) => (
+                      <li key={index}>
+                        {tag}{" "}
+                        <button
+                          type="button"
+                          onClick={() => handleTagRemove(index)}
+                        >
+                          Remove
+                        </button>
+                      </li>
+                    ))}
+                  </ul>
+                </div>
+              )}
+              <button type="submit">Submit</button>
+            </form>
+          )}
+        </>
+      )}
+      {completedCourses?.length > 0 && (
+        <h2 className="font-semibold text-lg mx-4 uppercase">Completed Courses</h2>
+      )}
+      {completedCourses?.length > 0 && (
+        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 xl:grid-cols-4 2xl:grid-cols-5 gap-4 items-start">
+          {completedCourses &&
+            completedCourses.map((course) => (
+              <button
+                key={course._id}
+                onClick={() => handleCourseClick(course._id)}
+                className="cursor-pointer flex flex-col m-4 gap-2 "
+              >
+                <img
+                  src="/cutepfp.jpg"
+                  alt="course-display"
+                  className="object-cover rounded-md hover:opacity-90 h-full w-full"
+                />
+
+                <div className="flex flex-col gap-2">
+                  <div className="">
+                    <h3 className="font-semibold text-lg text-left">
+                      {course.title}
+                    </h3>
+                    <p className="line-clamp-3 text-sm text-left">
+                      {course.description}
+                    </p>
+                  </div>
+                  <h3 className="text-sm text-left">{currentUser.name}</h3>
+                </div>
+              </button>
+            ))}
+        </div>
+      )}
+
+      {currentUser.role === "instructor"
+        ? pendingCoursesInstructor?.length > 0 && (
+            <h2 className="font-semibold text-lg mx-4 uppercase">Pending Courses</h2>
+          )
+        : pendingCoursesEnduser?.length > 0 && (
+            <h2 className="font-semibold text-lg mx-4 uppercase">Pending Courses</h2>
+          )}
+      {currentUser.role === "instructor"
+        ? pendingCoursesInstructor?.length > 0 && (
+            <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 xl:grid-cols-4 2xl:grid-cols-5 gap-4 items-start">
+              {pendingCoursesInstructor?.map((course) => (
                 <button
                   key={course._id}
                   onClick={() => handleCourseClick(course._id)}
@@ -290,38 +243,127 @@ export default function MyCourses() {
                   </div>
                 </button>
               ))}
-          </div>
-        </>
-      ) : (
-        <>
-          <h2 className="text-3xl font-semibold mx-4">Enrolled Courses</h2>
-          <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 xl:grid-cols-4 2xl:grid-cols-5 gap-4 items-start">
-            {enrolledCourses.map((course) => (
-              <button
-                key={course._id}
-                onClick={() => handleCourseClick(course._id)}
-                className="cursor-pointer flex flex-col m-4 gap-2 "
-              >
-                <img
-                  src="/cutepfp.jpg"
-                  alt="course-display"
-                  className="object-cover rounded-md hover:opacity-90 h-full w-full"
-                />
+            </div>
+          )
+        : pendingCoursesEnduser?.length > 0 && (
+            <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 xl:grid-cols-4 2xl:grid-cols-5 gap-4 items-start">
+              {pendingCoursesEnduser?.map((course) => (
+                <button
+                  key={course._id}
+                  onClick={() => handleCourseClick(course._id)}
+                  className="cursor-pointer flex flex-col m-4 gap-2 "
+                >
+                  <img
+                    src="/cutepfp.jpg"
+                    alt="course-display"
+                    className="object-cover rounded-md hover:opacity-90 h-full w-full"
+                  />
 
-                <div className="flex flex-col gap-2">
-                  <div className="">
-                    <h3 className="font-semibold text-lg text-left">
-                      {course.title}
-                    </h3>
-                    <p className="line-clamp-3 text-sm text-left">{course.description}</p>
+                  <div className="flex flex-col gap-2">
+                    <div className="">
+                      <h3 className="font-semibold text-lg text-left">
+                        {course.title}
+                      </h3>
+                      <p className="line-clamp-3 text-sm text-left">
+                        {course.description}
+                      </p>
+                    </div>
+                    <h3 className="text-sm text-left">{currentUser.name}</h3>
                   </div>
-                  <h3 className="text-sm text-left">{currentUser.name}</h3>
-                </div>
-              </button>
-            ))}
-          </div>
-        </>
-      )}
+                </button>
+              ))}
+            </div>
+          )}
+
+      {currentUser.role === "instructor"
+        ? ownedCourses?.length > 0 && (
+            <>
+              {ownedCourses?.length > 0 && (
+                <h2 className="font-semibold text-lg mx-4 uppercase">Owned Courses</h2>
+              )}
+              <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 xl:grid-cols-4 2xl:grid-cols-5 gap-4 items-start">
+                {ownedCourses &&
+                  ownedCourses?.map((course) => (
+                    <button
+                      key={course._id}
+                      onClick={() => handleCourseClick(course._id)}
+                      className="cursor-pointer flex flex-col m-4 gap-2 "
+                    >
+                      <img
+                        src="/cutepfp.jpg"
+                        alt="course-display"
+                        className="object-cover rounded-md hover:opacity-90 h-full w-full"
+                      />
+
+                      <div className="flex flex-col gap-2">
+                        <div className="">
+                          <h3 className="font-semibold text-lg text-left">
+                            {course.title}
+                          </h3>
+                          <p className="line-clamp-3 text-sm text-left">
+                            {course.description}
+                          </p>
+                        </div>
+                        <h3 className="text-sm text-left">
+                          {currentUser.name}
+                        </h3>
+                      </div>
+                    </button>
+                  ))}
+              </div>
+            </>
+          )
+        : enrolledCourses?.length > 0 && (
+            <>
+              {enrolledCourses?.length > 0 && (
+                <h2 className="font-semibold text-lg mx-4 uppercase">
+                  Enrolled Courses
+                </h2>
+              )}
+              <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 xl:grid-cols-4 2xl:grid-cols-5 gap-4 items-start">
+                {enrolledCourses?.map((course) => (
+                  <button
+                    key={course._id}
+                    onClick={() => handleCourseClick(course._id)}
+                    className="cursor-pointer flex flex-col m-4 gap-2 "
+                  >
+                    <img
+                      src="/cutepfp.jpg"
+                      alt="course-display"
+                      className="object-cover rounded-md hover:opacity-90 h-full w-full"
+                    />
+
+                    <div className="flex flex-col gap-2">
+                      <div className="">
+                        <h3 className="font-semibold text-lg text-left">
+                          {course.title}
+                        </h3>
+                        <p className="line-clamp-3 text-sm text-left">
+                          {course.description}
+                        </p>
+                      </div>
+                      <h3 className="text-sm text-left">{currentUser.name}</h3>
+                    </div>
+                  </button>
+                ))}
+              </div>
+            </>
+          )}
+      {currentUser.role === "instructor"
+        ? ownedCourses?.length == 0 &&
+          pendingCoursesInstructor?.length == 0 &&
+          completedCourses?.length == 0 && (
+            <div className=" text-lg mx-4">
+              There is no Course available yet
+            </div>
+          )
+        : enrolledCourses?.length == 0 &&
+          pendingCoursesEnduser?.length == 0 &&
+          completedCourses?.length == 0 && (
+            <div className=" text-lg mx-4">
+              There is no Course available yet
+            </div>
+          )}
     </div>
   );
 }
