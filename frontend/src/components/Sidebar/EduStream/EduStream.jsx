@@ -1,5 +1,5 @@
 import React from "react";
-import LibraryIcon from "./Icons/LibraryIcon";
+import LibraryIcon from "../../../utils/icons/LibraryIcon";
 
 export default function EduStream() {
   return (

@@ -1,5 +1,5 @@
 import React from "react";
-import SearchIcon from "./Icons/SearchIcon";
+import SearchIcon from "../../../utils/icons/SearchIcon";
 
 export default function Search() {
   return (

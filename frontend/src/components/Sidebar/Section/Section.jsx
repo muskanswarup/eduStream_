@@ -1,9 +1,9 @@
 import React from "react";
-import HomeIcon from "./Icons/HomeIcon";
-import BrowseIcon from "./Icons/BrowseIcon";
-import CourseIcon from "./Icons/CourseIcon";
+import HomeIcon from "../../../utils/icons/HomeIcon";
+import BrowseIcon from "../../../utils/icons/BrowseIcon";
+import CourseIcon from "../../../utils/icons/CourseIcon";
 import { useNavigate } from "react-router-dom";
-import LogOutIcon from "./Icons/LogOut";
+import LogOutIcon from "../../../utils/icons/LogOut";
 import { useDispatch } from "react-redux";
 import { logoutUser } from "../../../redux/user/userSlice";
 

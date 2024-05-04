@@ -1,47 +1,109 @@
 import axios from "axios";
 import React, { useEffect, useState } from "react";
 import { useSelector } from "react-redux";
-import { useNavigate } from "react-router-dom";
+import CourseCard from "./CourseCard/CourseCard";
 
-export default function MyCourses() {
-  const [userData, setUserData] = useState({});
+export default function MyCourses({ userData, setRender, render }) {
   const { currentUser } = useSelector((state) => state.user);
-  const navigate = useNavigate();
+
   const [showAddCourse, setShowAddCourse] = useState();
-  const [render, setRender] = useState(null);
 
   const [courseName, setCourseName] = useState("");
   const [courseDescription, setCourseDescription] = useState("");
   const [tags, setTags] = useState("");
   const [tagList, setTagList] = useState([]);
 
-  useEffect(() => {
-    const fetchUserData = async () => {
-      try {
-        const token = localStorage.getItem("token");
-        const headers = {
-          "Content-Type": "application/json",
-          Authorization: `Bearer ${token}`,
-        };
-        const res = await axios.get(
-          `http://localhost:3000/user/get_user/${currentUser._id}`,
-          {
-            method: "GET",
-            headers: headers,
-          }
-        );
-        const data = res.data;
-        setUserData(data);
-      } catch (error) {
-        console.log(error);
-      }
-    };
-    fetchUserData();
-  }, [render]);
+  const [completedCourses, setCompletedCourses] = useState([]);
+  const [enrolledCourses, setEnrolledCourses] = useState([]);
+  const [ownedCourses, setOwnedCourses] = useState([]);
 
-  const completedCourses = userData.completed_courses;
-  const ownedCourses = userData.owned_courses;
-  const enrolledCourses = userData.enrolled_courses;
+  useEffect(() => {
+    if (userData) {
+      const fetchInstructorName = async () => {
+        try {
+          const token = localStorage.getItem("token");
+          const headers = {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${token}`,
+          };
+
+          if (userData && userData.completed_courses) {
+            setCompletedCourses(
+              await Promise.all(
+                userData.completed_courses.map(async (course) => {
+                  try {
+                    const instructorRes = await axios.get(
+                      `http://localhost:3000/user/get_user/${course.instructor}`,
+                      {
+                        method: "GET",
+                        headers: headers,
+                      }
+                    );
+                    const instructorData = instructorRes.data;
+                    return { ...course, instructorName: instructorData.name };
+                  } catch (error) {
+                    console.error("Error fetching instructor data:", error);
+                    return { ...course, instructorName: "Unknown" };
+                  }
+                })
+              )
+            );
+          }
+
+          if (userData && userData.completed_courses) {
+            setOwnedCourses(
+              await Promise.all(
+                userData.owned_courses.map(async (course) => {
+                  try {
+                    const instructorRes = await axios.get(
+                      `http://localhost:3000/user/get_user/${course.instructor}`,
+                      {
+                        method: "GET",
+                        headers: headers,
+                      }
+                    );
+                    const instructorData = instructorRes.data;
+                    return { ...course, instructorName: instructorData.name };
+                  } catch (error) {
+                    console.error("Error fetching instructor data:", error);
+                    return { ...course, instructorName: "Unknown" };
+                  }
+                })
+              )
+            );
+          }
+
+          if (userData && userData.completed_courses) {
+            setEnrolledCourses(
+              await Promise.all(
+                userData.enrolled_courses.map(async (course) => {
+                  try {
+                    const instructorRes = await axios.get(
+                      `http://localhost:3000/user/get_user/${course.instructor}`,
+                      {
+                        method: "GET",
+                        headers: headers,
+                      }
+                    );
+                    const instructorData = instructorRes.data;
+                    return { ...course, instructorName: instructorData.name };
+                  } catch (error) {
+                    console.error("Error fetching instructor data:", error);
+                    return { ...course, instructorName: "Unknown" };
+                  }
+                })
+              )
+            );
+          }
+        } catch (error) {
+          console.log(error);
+        }
+      };
+
+      fetchInstructorName();
+    }
+  }, [userData]);
+
   const pendingCoursesEnduser = enrolledCourses
     ? enrolledCourses.filter((enrolledCourse) => {
         return !userData.completed_courses.some(
@@ -56,10 +118,6 @@ export default function MyCourses() {
         );
       })
     : [];
-
-  const handleCourseClick = (courseId) => {
-    navigate(`/${courseId}`);
-  };
 
   const handleTagChange = (e) => {
     setTags(e.target.value);
@@ -103,7 +161,7 @@ export default function MyCourses() {
     setTags("");
     setTagList([]);
   };
-  
+
   return (
     <div className="m-4 flex flex-col gap-2">
       {currentUser.role === "instructor" && (
@@ -175,102 +233,60 @@ export default function MyCourses() {
         </>
       )}
       {completedCourses?.length > 0 && (
-        <h2 className="font-semibold text-lg mx-4 uppercase">Completed Courses</h2>
+        <h2 className="font-semibold text-lg mx-4 uppercase">
+          Completed Courses
+        </h2>
       )}
       {completedCourses?.length > 0 && (
         <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 xl:grid-cols-4 2xl:grid-cols-5 gap-4 items-start">
           {completedCourses &&
             completedCourses.map((course) => (
-              <button
+              <CourseCard
                 key={course._id}
-                onClick={() => handleCourseClick(course._id)}
-                className="cursor-pointer flex flex-col m-4 gap-2 "
-              >
-                <img
-                  src="/cutepfp.jpg"
-                  alt="course-display"
-                  className="object-cover rounded-md hover:opacity-90 h-full w-full"
-                />
-
-                <div className="flex flex-col gap-2">
-                  <div className="">
-                    <h3 className="font-semibold text-lg text-left">
-                      {course.title}
-                    </h3>
-                    <p className="line-clamp-3 text-sm text-left">
-                      {course.description}
-                    </p>
-                  </div>
-                  <h3 className="text-sm text-left">{currentUser.name}</h3>
-                </div>
-              </button>
+                id={course._id}
+                title={course.title}
+                description={course.description}
+                instructorName={course.instructorName}
+              />
             ))}
         </div>
       )}
 
       {currentUser.role === "instructor"
         ? pendingCoursesInstructor?.length > 0 && (
-            <h2 className="font-semibold text-lg mx-4 uppercase">Pending Courses</h2>
+            <h2 className="font-semibold text-lg mx-4 uppercase">
+              Pending Courses
+            </h2>
           )
         : pendingCoursesEnduser?.length > 0 && (
-            <h2 className="font-semibold text-lg mx-4 uppercase">Pending Courses</h2>
+            <h2 className="font-semibold text-lg mx-4 uppercase">
+              Pending Courses
+            </h2>
           )}
       {currentUser.role === "instructor"
         ? pendingCoursesInstructor?.length > 0 && (
             <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 xl:grid-cols-4 2xl:grid-cols-5 gap-4 items-start">
               {pendingCoursesInstructor?.map((course) => (
-                <button
+                <CourseCard
                   key={course._id}
-                  onClick={() => handleCourseClick(course._id)}
-                  className="cursor-pointer flex flex-col m-4 gap-2 "
-                >
-                  <img
-                    src="/cutepfp.jpg"
-                    alt="course-display"
-                    className="object-cover rounded-md hover:opacity-90 h-full w-full"
-                  />
-
-                  <div className="flex flex-col gap-2">
-                    <div className="">
-                      <h3 className="font-semibold text-lg text-left">
-                        {course.title}
-                      </h3>
-                      <p className="line-clamp-3 text-sm text-left">
-                        {course.description}
-                      </p>
-                    </div>
-                    <h3 className="text-sm text-left">{currentUser.name}</h3>
-                  </div>
-                </button>
+                  id={course._id}
+                  title={course.title}
+                  description={course.description}
+                  instructorName={course.instructorName}
+                />
               ))}
             </div>
           )
         : pendingCoursesEnduser?.length > 0 && (
             <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 xl:grid-cols-4 2xl:grid-cols-5 gap-4 items-start">
               {pendingCoursesEnduser?.map((course) => (
-                <button
+                <CourseCard
                   key={course._id}
-                  onClick={() => handleCourseClick(course._id)}
-                  className="cursor-pointer flex flex-col m-4 gap-2 "
-                >
-                  <img
-                    src="/cutepfp.jpg"
-                    alt="course-display"
-                    className="object-cover rounded-md hover:opacity-90 h-full w-full"
-                  />
-
-                  <div className="flex flex-col gap-2">
-                    <div className="">
-                      <h3 className="font-semibold text-lg text-left">
-                        {course.title}
-                      </h3>
-                      <p className="line-clamp-3 text-sm text-left">
-                        {course.description}
-                      </p>
-                    </div>
-                    <h3 className="text-sm text-left">{currentUser.name}</h3>
-                  </div>
-                </button>
+                  id={course._id}
+                  title={course.title}
+                  description={course.description}
+                  instructorName={course.instructorName}
+                />
               ))}
             </div>
           )}
@@ -279,36 +295,20 @@ export default function MyCourses() {
         ? ownedCourses?.length > 0 && (
             <>
               {ownedCourses?.length > 0 && (
-                <h2 className="font-semibold text-lg mx-4 uppercase">Owned Courses</h2>
+                <h2 className="font-semibold text-lg mx-4 uppercase">
+                  Owned Courses
+                </h2>
               )}
               <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 xl:grid-cols-4 2xl:grid-cols-5 gap-4 items-start">
                 {ownedCourses &&
                   ownedCourses?.map((course) => (
-                    <button
+                    <CourseCard
                       key={course._id}
-                      onClick={() => handleCourseClick(course._id)}
-                      className="cursor-pointer flex flex-col m-4 gap-2 "
-                    >
-                      <img
-                        src="/cutepfp.jpg"
-                        alt="course-display"
-                        className="object-cover rounded-md hover:opacity-90 h-full w-full"
-                      />
-
-                      <div className="flex flex-col gap-2">
-                        <div className="">
-                          <h3 className="font-semibold text-lg text-left">
-                            {course.title}
-                          </h3>
-                          <p className="line-clamp-3 text-sm text-left">
-                            {course.description}
-                          </p>
-                        </div>
-                        <h3 className="text-sm text-left">
-                          {currentUser.name}
-                        </h3>
-                      </div>
-                    </button>
+                      id={course._id}
+                      title={course.title}
+                      description={course.description}
+                      instructorName={course.instructorName}
+                    />
                   ))}
               </div>
             </>
@@ -322,29 +322,13 @@ export default function MyCourses() {
               )}
               <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 xl:grid-cols-4 2xl:grid-cols-5 gap-4 items-start">
                 {enrolledCourses?.map((course) => (
-                  <button
+                  <CourseCard
                     key={course._id}
-                    onClick={() => handleCourseClick(course._id)}
-                    className="cursor-pointer flex flex-col m-4 gap-2 "
-                  >
-                    <img
-                      src="/cutepfp.jpg"
-                      alt="course-display"
-                      className="object-cover rounded-md hover:opacity-90 h-full w-full"
-                    />
-
-                    <div className="flex flex-col gap-2">
-                      <div className="">
-                        <h3 className="font-semibold text-lg text-left">
-                          {course.title}
-                        </h3>
-                        <p className="line-clamp-3 text-sm text-left">
-                          {course.description}
-                        </p>
-                      </div>
-                      <h3 className="text-sm text-left">{currentUser.name}</h3>
-                    </div>
-                  </button>
+                    id={course._id}
+                    title={course.title}
+                    description={course.description}
+                    instructorName={course.instructorName}
+                  />
                 ))}
               </div>
             </>

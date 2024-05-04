@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React from "react";
 import EduStream from "./EduStream/EduStream";
 import Search from "./Search/Search";
 import Section from "./Section/Section";
