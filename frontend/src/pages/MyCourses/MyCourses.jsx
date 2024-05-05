@@ -98,7 +98,7 @@ export default function MyCourses({ courseData, userData, setRender, render }) {
   };
 
   return (
-    <div className="m-4 flex flex-col gap-2">
+    <div className="m-2 sm:m-4 flex flex-col gap-2">
       {currentUser.role === "instructor" && (
         <>
           <button
@@ -150,7 +150,6 @@ export default function MyCourses({ courseData, userData, setRender, render }) {
                         id="tags"
                         value={tags}
                         onChange={handleTagChange}
-                      
                         placeholder="Enter tags 1 by 1"
                         className="bg-gray-100 focus:outline-none hidden md:block"
                       ></input>
@@ -197,8 +196,8 @@ export default function MyCourses({ courseData, userData, setRender, render }) {
       {!showAddCourse && (
         <>
           {completedCourses?.length > 0 && (
-            <div>
-              <h2 className="font-semibold text-lg mx-4 uppercase">
+            <>
+              <h2 className="font-semibold text-lg sm:mx-4 uppercase">
                 Completed Courses
               </h2>
               <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 xl:grid-cols-4 2xl:grid-cols-5 gap-4 items-start">
@@ -212,7 +211,7 @@ export default function MyCourses({ courseData, userData, setRender, render }) {
                   />
                 ))}
               </div>
-            </div>
+            </>
           )}
 
           {currentUser.role === "instructor"

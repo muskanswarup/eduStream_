@@ -75,9 +75,8 @@ function App() {
         <main className="flex h-screen bg-gray-200">
           <Sidebar />
           <div
-            className={`flex-1 my-4 mr-4 overflow-y-auto border rounded-xl bg-gray-50 shadow-md ${
-              currentUser ? "ml-2" : "ml-4"
-            }`}
+            className={`flex-1 sm:my-4 sm:mr-4 overflow-y-auto border rounded-xl bg-gray-50 shadow-md 
+              sm:ml-2`}
           >
             <Routes>
               <Route

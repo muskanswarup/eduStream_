@@ -41,7 +41,7 @@ export default function CourseCard({ course, render, setRender }) {
     <div
       key={course._id}
       onClick={() => handleCourseClick(course._id)}
-      className="cursor-pointer flex flex-col m-4 gap-2 "
+      className="cursor-pointer flex flex-col sm:m-4 gap-2 "
     >
       <img
         src="/cutepfp.jpg"
@@ -49,8 +49,8 @@ export default function CourseCard({ course, render, setRender }) {
         className="object-cover rounded-md hover:opacity-90 h-full w-full"
       />
       <div className="flex flex-col gap-2">
-        <div className="">
-          <div className="flex justify-between items-center">
+       
+          <div className="flex justify-between items-center ">
             <h3 className="font-semibold text-lg">{course.title}</h3>
             {currentUser.role === "admin" && (
               <div className=" group relative">
@@ -62,7 +62,7 @@ export default function CourseCard({ course, render, setRender }) {
             )}
           </div>
           <p className="line-clamp-3 text-sm">{course.description}</p>
-        </div>
+        
         <h3 className="text-sm text-purple-700">{course.instructor.name}</h3>
         <div className="flex flex-wrap gap-2">
           {course.tags.map((tag) => (

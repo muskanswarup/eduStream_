@@ -108,7 +108,7 @@ export default function Course({ courseData, userData, setRender, render }) {
   };
 
   return (
-    <div className="m-4 flex flex-col gap-2">
+    <div className="m-2 sm:m-4 flex flex-col gap-2">
       {currentUser._id ===
         courseData?.find((course) => course._id === courseId)?.instructor
           ?._id && (
@@ -166,7 +166,7 @@ export default function Course({ courseData, userData, setRender, render }) {
       )}
       {!showAddContent && (
         <>
-          <div className="mx-4 flex justify-between items-center">
+          <div className="sm:mx-4 flex justify-between items-center">
             <h2 className="font-semibold text-lg uppercase">Course Content</h2>
             {currentUser.role === "enduser" &&
               !userData?.enrolled_courses?.some(

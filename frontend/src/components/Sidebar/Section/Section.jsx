@@ -185,39 +185,7 @@ export default function Section({ name, path, pathname }) {
         </>
       );
       break;
-    case "Manage Courses":
-      component = (
-        <>
-          <div
-            className={`lg:hidden border border-gray-50 rounded-[4px] py-1 flex justify-center ${
-              isMatching && "bg-purple-700"
-            }`}
-            onClick={() => navigate(`${path}`)}
-          >
-            <CourseIcon
-              className={` ${isMatching && "text-white"}`}
-            ></CourseIcon>
-          </div>
-          <button
-            className={`lg:flex gap-4 items-center hover:bg-purple-700 py-1 px-3 border border-gray-50 rounded-[4px] group hidden ${
-              isMatching && "bg-purple-700"
-            }`}
-            onClick={() => navigate(`${path}`)}
-          >
-            <CourseIcon
-              className={`group-hover:text-white ${isMatching && "text-white"}`}
-            ></CourseIcon>
-            <span
-              className={`font-semibold group-hover:text-white ${
-                isMatching && "text-white"
-              }`}
-            >
-              {name}
-            </span>
-          </button>
-        </>
-      );
-      break;
+  
     case "Manage Users":
       component = (
         <>

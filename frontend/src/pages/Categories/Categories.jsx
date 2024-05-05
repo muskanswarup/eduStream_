@@ -39,15 +39,15 @@ export default function Categories({ courseData, userData }) {
   };
 
   return (
-    <div className="m-4 flex flex-col gap-2">
-      <h2 className="font-semibold text-lg mx-4 uppercase">Categories</h2>
-      <div className="flex">
+    <div className="m-2 sm:m-4 flex flex-col gap-2">
+      <h2 className="font-semibold text-lg sm:mx-4 uppercase">Categories</h2>
+      <div className="flex flex-wrap">
         {tagsData ? (
           tagsData.map((tag) => (
             <button
               key={tag._id}
               onClick={() => handleTagClick(tag._id)}
-              className={`mx-2 px-3 py-1 rounded-sm text-sm ${
+              className={`mx-1 sm:mx-2 px-3 my-1 py-1 rounded-sm text-sm ${
                 selectedTag.includes(tag._id)
                   ? "bg-purple-700 text-white"
                   : "bg-gray-200 text-gray-700"
@@ -62,7 +62,7 @@ export default function Categories({ courseData, userData }) {
           </div>
         )}
       </div>
-      <h2 className="font-semibold text-lg mx-4 uppercase mt-2">Courses</h2>
+      <h2 className="font-semibold text-lg sm:mx-4 uppercase mt-2">Courses</h2>
       {selectedTag.length > 0 ? (
         <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 xl:grid-cols-4 2xl:grid-cols-5 gap-4 items-start">
           {courseData

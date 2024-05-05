@@ -26,14 +26,14 @@ export default function ManageUsers({ render, setRender }) {
       }
     };
     fetchUserData();
-  });
+  },[render]);
   return (
-    <div className="m-4 flex flex-col gap-2">
+    <div className="m-2 sm:m-4 flex flex-col gap-2">
       {userData.length > 0 ? (
         <>
           {userData.some((user) => user.role === "instructor") && (
             <>
-              <h2 className="font-semibold text-lg mx-4 uppercase ">
+              <h2 className="font-semibold text-lg sm:mx-4 uppercase ">
                 Instructors
               </h2>
 
@@ -56,7 +56,7 @@ export default function ManageUsers({ render, setRender }) {
 
           {userData.some((user) => user.role === "enduser") && (
             <>
-              <h2 className="font-semibold text-lg mx-4 uppercase ">
+              <h2 className="font-semibold text-lg sm:mx-4 uppercase mt-2">
                 EndUsers
               </h2>
 

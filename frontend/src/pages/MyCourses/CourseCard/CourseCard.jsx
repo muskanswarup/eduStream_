@@ -14,7 +14,7 @@ export default function CourseCard({ id, title, description, instructorName }) {
     <div
       key={id}
       onClick={() => handleCourseClick(id)}
-      className="cursor-pointer flex flex-col m-4 gap-2 "
+      className="cursor-pointer flex flex-col sm:m-4 gap-2 "
     >
       <img
         src="/cutepfp.jpg"

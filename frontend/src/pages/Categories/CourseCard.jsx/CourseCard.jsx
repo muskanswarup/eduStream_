@@ -15,7 +15,7 @@ export default function CourseCard({ userData, course }) {
     <div
       key={course._id}
       onClick={() => handleCourseClick(course._id)}
-      className="cursor-pointer flex flex-col m-4 gap-2 "
+      className="cursor-pointer flex flex-col sm:m-4 gap-2 "
     >
       <img
         src="/cutepfp.jpg"
@@ -23,7 +23,7 @@ export default function CourseCard({ userData, course }) {
         className="object-cover rounded-md hover:opacity-90 h-full w-full"
       />
       <div className="flex flex-col gap-2">
-        <div className="">
+        
           <div className="flex justify-between items-center">
             <h3 className="font-semibold text-lg">{course.title}</h3>
             {currentUser.role === "enduser" &&
@@ -50,7 +50,7 @@ export default function CourseCard({ userData, course }) {
               )}
           </div>
           <p className="line-clamp-3 text-sm">{course.description}</p>
-        </div>
+       
         <h3
           className={`text-sm ${
             course.instructor.name === currentUser.name

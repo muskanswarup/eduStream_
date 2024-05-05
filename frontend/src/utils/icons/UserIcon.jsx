@@ -2,8 +2,6 @@ const UserIcon = (props) => (
   <svg
     xmlns="http://www.w3.org/2000/svg"
     viewBox="0 0 24 24"
-    width={20}
-    height={20}
     color={"#000000"}
     fill={"none"}
     {...props}

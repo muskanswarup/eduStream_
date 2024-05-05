@@ -23,7 +23,7 @@ export default function UserCard({ user, render, setRender }) {
   };
 
   return (
-    <div key={user._id} className="cursor-pointer flex flex-col m-4 gap-2 ">
+    <div key={user._id} className="cursor-pointer flex flex-col sm:m-4 gap-2 ">
       <img
         src="/cutepfp.jpg"
         alt="course-display"

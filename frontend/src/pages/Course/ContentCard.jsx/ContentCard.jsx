@@ -51,7 +51,7 @@ export default function ContentCard({
     }
   };
   return (
-    <div key={content._id} className="cursor-pointer flex flex-col m-4 gap-1 ">
+    <div key={content._id} className="cursor-pointer flex flex-col sm:m-4 gap-1 ">
       <iframe
         className="object-cover rounded-md hover:opacity-90 h-60 w-full"
         title={content.title}
