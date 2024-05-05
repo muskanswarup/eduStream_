@@ -8,6 +8,7 @@ import { useSelector } from "react-redux";
 import CourseIcon from "../../utils/icons/CourseIcon";
 import UserIcon from "../../utils/icons/UserIcon";
 import BrowseIcon from "../../utils/icons/BrowseIcon";
+import HomeIcon from "../../utils/icons/HomeIcon";
 
 export default function Sidebar() {
   const location = useLocation();
