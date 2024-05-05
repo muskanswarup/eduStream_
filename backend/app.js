@@ -6,13 +6,12 @@ import middleware from "./utils/middleware.js";
 import { courseRouter } from "./routes/course.route.js";
 import { userRouter } from "./routes/user.route.js";
 import { contentRouter } from "./routes/content.route.js";
-import config from "./utils/config.js";
 import { tagRouter } from "./routes/tag.route.js";
 
 const app = express();
 
 const cors_options = {
-  origin: config.ORIGIN,
+  origin: "https://edu-stream-frontend.vercel.app",
   methods: ["GET", "POST", "PUT", "PATCH", "DELETE"],
   credentials: true,
 };
