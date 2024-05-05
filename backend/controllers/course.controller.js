@@ -10,7 +10,7 @@ const getAllCourses = async (req, res, next) => {
       .populate("instructor")
       .populate("tags");
     if (allCourses.length === 0) {
-      return res.status(200).json({ message: "There are no courses" });
+      return res.status(200).send();
     }
     res.status(200).json(allCourses);
   } catch (error) {

@@ -53,7 +53,9 @@ export default function CourseCard({ userData, course }) {
         </div>
         <h3
           className={`text-sm ${
-            course.instructor.name === currentUser.name && "text-green-700"
+            course.instructor.name === currentUser.name
+              ? "text-green-700"
+              : "text-purple-700"
           }`}
         >
           {course.instructor.name === currentUser.name

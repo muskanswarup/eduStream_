@@ -9,6 +9,7 @@ export default function ContentCard({
   setRender,
   render,
   courseData,
+  courseId,
 }) {
   const { currentUser } = useSelector((state) => state.user);
 
@@ -71,8 +72,22 @@ export default function ContentCard({
             </div>
           </div>
         )}
+        {currentUser.role === "admin" && (
+          <div className=" group relative">
+            <DeleteIcon
+              className="text-red-700"
+              onClick={() => handleDeleteContent(content._id)}
+            />
+            <div className="absolute top-4 left-1/2 transform -translate-x-1/2 bg-red-700 text-white text-xs px-2 py-1 rounded mt-1 opacity-0 group-hover:opacity-100 transition-opacity duration-300">
+              Delete
+            </div>
+          </div>
+        )}
         {!content.watchedBy.includes(currentUser._id) &&
-          currentUser.role === "enduser" && (
+          currentUser.role === "enduser" &&
+          courseData
+            ?.find((course) => course._id === courseId)
+            ?.enrolled_users?.find((user) => user === currentUser._id) && (
             <div className=" group relative">
               <EyeIcon
                 className="text-yellow-700"

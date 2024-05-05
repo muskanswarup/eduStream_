@@ -32,7 +32,7 @@ export default function Signup() {
       dispatch(signInFailure(error.message))
     }
   } 
-  console.log({ name, email, password, role });
+ 
   return (
     <div className="flex items-center justify-center mt-12">
       <form
@@ -105,6 +105,7 @@ export default function Signup() {
           >
             <option value="enduser">Enduser</option>
             <option value="instructor">Instructor</option>
+            <option value="admin">Admin</option>
           </select>
         </div>
         <div className="flex flex-col items-center gap-y-4 mb-4">

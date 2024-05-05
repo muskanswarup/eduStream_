@@ -20,7 +20,7 @@ const getTags = async (req, res, next) => {
   try {
     const tags = await tagModel.find({});
     if (tags.length === 0) {
-      return res.status(200).json({ message: "There are no tags" });
+      return res.status(200).send();
     }
     res.status(200).json(tags);
   } catch (error) {

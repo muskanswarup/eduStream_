@@ -4,7 +4,7 @@ import axios from 'axios';
 import { logInFailure, logInStart, logInSuccess } from "../../redux/user/userSlice";
 import { useDispatch } from "react-redux";
 
-export default function Login() {
+export default function Login({ render, setRender}) {
   const navigate = useNavigate()
   const dispatch = useDispatch()
   const [email, setEmail] = useState('');
@@ -25,12 +25,13 @@ export default function Login() {
         return;
       }
       dispatch(logInSuccess(data));
+      setRender(!render)
       navigate("/");
     } catch (error) {
       dispatch(logInFailure(error.message))
     }
   } 
-  console.log({ email, password });
+ 
   return (
     <div className="flex items-center justify-center mt-12">
       <form

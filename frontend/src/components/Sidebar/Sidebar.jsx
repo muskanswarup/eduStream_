@@ -16,17 +16,37 @@ export default function Sidebar() {
         <div className=" m-4 flex flex-col gap-4">
           <EduStream />
           <Search />
-          <Section name="Home" path="/" pathname={location.pathname} />
-          <Section
-            name="My Courses"
-            path="/mycourses"
-            pathname={location.pathname}
-          />
-          <Section
-            name="Browse Categories"
-            path="/categories"
-            pathname={location.pathname}
-          />
+          {currentUser.role !== "admin" && (
+            <Section name="Home" path="/" pathname={location.pathname} />
+          )}
+          {currentUser.role !== "admin" && (
+            <Section
+              name="My Courses"
+              path="/mycourses"
+              pathname={location.pathname}
+            />
+          )}
+          {currentUser.role !== "admin" && (
+            <Section
+              name="Browse Categories"
+              path="/categories"
+              pathname={location.pathname}
+            />
+          )}
+          {currentUser.role === "admin" && (
+            <Section
+              name="Manage Courses"
+              path="/managecourses"
+              pathname={location.pathname}
+            />
+          )}
+          {currentUser.role === "admin" && (
+            <Section
+              name="Manage Users"
+              path="/manageusers"
+              pathname={location.pathname}
+            />
+          )}
         </div>
 
         <div className=" m-4 flex flex-col gap-4">

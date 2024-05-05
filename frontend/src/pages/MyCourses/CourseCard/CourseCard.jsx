@@ -25,11 +25,11 @@ export default function CourseCard({ id, title, description, instructorName }) {
       <div className="flex flex-col gap-2">
         <div className="">
           <h3 className="font-semibold text-lg text-left">{title}</h3>
-          <p className="line-clamp-3 text-sm text-left">{description}</p>
+          <p className="line-clamp-3 text-xs text-left">{description}</p>
         </div>
         <h3
           className={`text-sm text-left ${
-            instructorName === currentUser.name && "text-green-700"
+            instructorName === currentUser.name ? "text-green-700" : "text-purple-700"
           }`}
         >
           {instructorName === currentUser.name ? "me" : instructorName}

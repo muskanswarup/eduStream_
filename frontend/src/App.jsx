@@ -6,12 +6,16 @@ import Signup from "./pages/Signup/Signup";
 import Profile from "./pages/Profile/Profile";
 import MyCourses from "./pages/MyCourses/MyCourses";
 import Categories from "./pages/Categories/Categories";
-import PrivateRoute from "./components/PrivateRoute/PrivateRoute";
 import Course from "./pages/Course/Course";
 import Sidebar from "./components/Sidebar/Sidebar";
 import { useSelector } from "react-redux";
 import axios from "axios";
 import React, { useEffect, useState } from "react";
+import PrivateRouteAdmin from "./components/PrivateRouteAdmin/PrivateRouteAdmin";
+import ManageCourses from "./pages/ManageCourses/ManageCourses";
+import ManageUsers from "./pages/ManageUsers/ManageUsers";
+import ProtectedRoute from "./components/ProtectedRoute/ProtectedRoute";
+import PrivateRouteInstructorEnduser from "./components/PrivateRouteInstructorEnduser/PrivateRouteInstructorEnduser";
 
 function App() {
   const { currentUser } = useSelector((state) => state.user);
@@ -76,9 +80,12 @@ function App() {
             }`}
           >
             <Routes>
-              <Route path="/login" element={<Login />} />
+              <Route
+                path="/login"
+                element={<Login render={render} setRender={setRender} />}
+              />
               <Route path="/signup" element={<Signup />} />
-              <Route element={<PrivateRoute />}>
+              <Route element={<PrivateRouteInstructorEnduser />}>
                 <Route
                   path="/categories"
                   element={
@@ -93,13 +100,15 @@ function App() {
                   path="/mycourses"
                   element={
                     <MyCourses
+                      courseData={courseData}
                       userData={userData}
                       setRender={setRender}
                       render={render}
                     />
                   }
                 />
-                <Route path="/profile" element={<Profile />} />
+              </Route>
+              <Route element={<ProtectedRoute />}>
                 <Route
                   path="/:id"
                   element={
@@ -107,7 +116,27 @@ function App() {
                       userData={userData}
                       setRender={setRender}
                       render={render}
+                      courseData={courseData}
                     />
+                  }
+                />
+                <Route path="/profile" element={<Profile />} />
+              </Route>
+              <Route element={<PrivateRouteAdmin />}>
+                <Route
+                  path="/managecourses"
+                  element={
+                    <ManageCourses
+                      courseData={courseData}
+                      setRender={setRender}
+                      render={render}
+                    />
+                  }
+                />
+                <Route
+                  path="/manageusers"
+                  element={
+                    <ManageUsers setRender={setRender} render={render} />
                   }
                 />
               </Route>

@@ -3,10 +3,10 @@ import React, { useEffect, useState } from "react";
 import { useSelector } from "react-redux";
 import CourseCard from "./CourseCard/CourseCard";
 
-export default function MyCourses({ userData, setRender, render }) {
+export default function MyCourses({ courseData, userData, setRender, render }) {
   const { currentUser } = useSelector((state) => state.user);
 
-  const [showAddCourse, setShowAddCourse] = useState();
+  const [showAddCourse, setShowAddCourse] = useState(false);
 
   const [courseName, setCourseName] = useState("");
   const [courseDescription, setCourseDescription] = useState("");
@@ -18,91 +18,26 @@ export default function MyCourses({ userData, setRender, render }) {
   const [ownedCourses, setOwnedCourses] = useState([]);
 
   useEffect(() => {
-    if (userData) {
-      const fetchInstructorName = async () => {
-        try {
-          const token = localStorage.getItem("token");
-          const headers = {
-            "Content-Type": "application/json",
-            Authorization: `Bearer ${token}`,
-          };
-
-          if (userData && userData.completed_courses) {
-            setCompletedCourses(
-              await Promise.all(
-                userData.completed_courses.map(async (course) => {
-                  try {
-                    const instructorRes = await axios.get(
-                      `http://localhost:3000/user/get_user/${course.instructor}`,
-                      {
-                        method: "GET",
-                        headers: headers,
-                      }
-                    );
-                    const instructorData = instructorRes.data;
-                    return { ...course, instructorName: instructorData.name };
-                  } catch (error) {
-                    console.error("Error fetching instructor data:", error);
-                    return { ...course, instructorName: "Unknown" };
-                  }
-                })
-              )
-            );
-          }
-
-          if (userData && userData.completed_courses) {
-            setOwnedCourses(
-              await Promise.all(
-                userData.owned_courses.map(async (course) => {
-                  try {
-                    const instructorRes = await axios.get(
-                      `http://localhost:3000/user/get_user/${course.instructor}`,
-                      {
-                        method: "GET",
-                        headers: headers,
-                      }
-                    );
-                    const instructorData = instructorRes.data;
-                    return { ...course, instructorName: instructorData.name };
-                  } catch (error) {
-                    console.error("Error fetching instructor data:", error);
-                    return { ...course, instructorName: "Unknown" };
-                  }
-                })
-              )
-            );
-          }
-
-          if (userData && userData.completed_courses) {
-            setEnrolledCourses(
-              await Promise.all(
-                userData.enrolled_courses.map(async (course) => {
-                  try {
-                    const instructorRes = await axios.get(
-                      `http://localhost:3000/user/get_user/${course.instructor}`,
-                      {
-                        method: "GET",
-                        headers: headers,
-                      }
-                    );
-                    const instructorData = instructorRes.data;
-                    return { ...course, instructorName: instructorData.name };
-                  } catch (error) {
-                    console.error("Error fetching instructor data:", error);
-                    return { ...course, instructorName: "Unknown" };
-                  }
-                })
-              )
-            );
-          }
-        } catch (error) {
-          console.log(error);
-        }
-      };
-
-      fetchInstructorName();
+    if (userData && courseData) {
+      setCompletedCourses(
+        userData?.completed_courses?.map((completedCourse) => {
+          return courseData.find(
+            (course) => course._id === completedCourse._id
+          );
+        })
+      );
+      setEnrolledCourses(
+        userData?.enrolled_courses?.map((enrolledCourse) => {
+          return courseData.find((course) => course._id === enrolledCourse._id);
+        })
+      );
+      setOwnedCourses(
+        userData?.owned_courses?.map((ownedCourse) => {
+          return courseData.find((course) => course._id === ownedCourse._id);
+        })
+      );
     }
-  }, [userData]);
+  }, [userData, courseData]);
 
   const pendingCoursesEnduser = enrolledCourses
     ? enrolledCourses.filter((enrolledCourse) => {
@@ -168,186 +103,211 @@ export default function MyCourses({ userData, setRender, render }) {
         <>
           <button
             onClick={() => setShowAddCourse(!showAddCourse)}
-            className="border hover:bg-purple-700 rounded-lg hover:text-white font-semibold bg-gray-100 border-gray-300 md:rounded-[4px] text-sm px-3 shadow-sm h-9"
+            className="border hover:bg-purple-700 rounded-lg hover:text-white font-semibold bg-gray-100 border-gray-300 md:rounded-[4px] text-sm px-3 shadow-sm h-9 "
           >
-            Add a Course
+            {showAddCourse ? "Hide Add Course" : "Show Add Course"}
           </button>
           {showAddCourse && (
-            <form onSubmit={handleSubmit}>
-              <div>
-                <label htmlFor="courseName">Course Name:</label>
-                <input
-                  type="text"
-                  id="courseName"
-                  value={courseName}
-                  onChange={(e) => setCourseName(e.target.value)}
-                  required
-                  className="bg-slate-300 border rounded-md"
-                />
-              </div>
-              <div>
-                <label htmlFor="courseDescription">Course Description:</label>
-                <textarea
-                  id="courseDescription"
-                  value={courseDescription}
-                  onChange={(e) => setCourseDescription(e.target.value)}
-                  required
-                  className="bg-slate-300 border rounded-md"
-                />
-              </div>
-              <div>
-                <label htmlFor="tags">Tags:</label>
-                <input
-                  type="text"
-                  id="tags"
-                  value={tags}
-                  onChange={handleTagChange}
-                  placeholder="Enter tags separated by comma"
-                  className="bg-slate-300 border rounded-md"
-                />
-                <button type="button" onClick={handleTagAdd}>
-                  Add Tag
-                </button>
-              </div>
-              {tagList.length > 0 && (
-                <div>
-                  <p>Selected Tags:</p>
-                  <ul>
-                    {tagList.map((tag, index) => (
-                      <li key={index}>
-                        {tag}{" "}
-                        <button
-                          type="button"
+            <div className="flex justify-center mt-4">
+              <form
+                className="p-4 flex flex-col gap-2  w-96 border bg-gray-100 rounded-lg border-gray-300"
+                onSubmit={handleSubmit}
+              >
+                <div className="flex flex-col gap-1">
+                  <h1 className="font-semibold ">Course Name</h1>
+                  <div className="border bg-gray-100 border-gray-300 md:rounded-[4px] lg:flex items-center gap-2 text-sm px-3 py-1 shadow-sm h-9 hidden ">
+                    <input
+                      type="text"
+                      id="courseName"
+                      value={courseName}
+                      onChange={(e) => setCourseName(e.target.value)}
+                      required
+                      placeholder="Course Name"
+                      className="bg-gray-100 focus:outline-none hidden md:block"
+                    ></input>
+                  </div>
+                </div>
+                <div className="flex flex-col gap-1">
+                  <h1 className="font-semibold ">Course Description</h1>
+                  <div className="border bg-gray-100 border-gray-300 md:rounded-[4px] lg:flex items-center gap-2 text-sm px-3 py-1 shadow-sm h-9 hidden ">
+                    <input
+                      type="text"
+                      id="courseDescription"
+                      value={courseDescription}
+                      onChange={(e) => setCourseDescription(e.target.value)}
+                      required
+                      placeholder="Course Description"
+                      className="bg-gray-100 focus:outline-none hidden md:block"
+                    ></input>
+                  </div>
+                </div>
+                <div className="flex flex-col gap-1">
+                  <h1 className="font-semibold ">Tags</h1>
+                  <div className="flex justify-between">
+                    <div className="border bg-gray-100 border-gray-300 md:rounded-[4px] lg:flex items-center gap-2 text-sm px-3 py-1 shadow-sm h-9 hidden ">
+                      <input
+                        type="text"
+                        id="tags"
+                        value={tags}
+                        onChange={handleTagChange}
+                        required
+                        placeholder="Enter tags 1 by 1"
+                        className="bg-gray-100 focus:outline-none hidden md:block"
+                      ></input>
+                    </div>
+                    <button
+                      className="border hover:bg-purple-700 rounded-lg hover:text-white font-semibold bg-gray-100 border-gray-300 md:rounded-[4px] text-sm px-3 shadow-sm h-9"
+                      onClick={handleTagAdd}
+                      type="button"
+                    >
+                      Add Tag
+                    </button>
+                  </div>
+                </div>
+                {tagList.length > 0 && (
+                  <div>
+                    <h1 className="font-semibold ">Selected Tags</h1>
+                    <ul>
+                      {tagList.map((tag, index) => (
+                        <li
+                          key={index}
+                          className="inline-flex items-center rounded-[4px] border px-2.5 py-0.5 text-xs font-semibold bg-purple-700 text-white hover:bg-opacity-80 hover:cursor-pointer gap-2"
                           onClick={() => handleTagRemove(index)}
                         >
-                          Remove
-                        </button>
-                      </li>
-                    ))}
-                  </ul>
-                </div>
-              )}
-              <button type="submit">Submit</button>
-            </form>
+                          <span className="">{tag}</span>
+                          <h1 className="font-semibold text-black items-center">
+                            x
+                          </h1>
+                        </li>
+                      ))}
+                    </ul>
+                  </div>
+                )}
+                <button
+                  className="border hover:bg-purple-700 rounded-lg hover:text-white font-semibold bg-gray-100 border-gray-300 md:rounded-[4px] text-sm px-3 shadow-sm h-9"
+                  type="submit"
+                >
+                  Submit
+                </button>
+              </form>
+            </div>
           )}
         </>
       )}
-      {completedCourses?.length > 0 && (
-        <h2 className="font-semibold text-lg mx-4 uppercase">
-          Completed Courses
-        </h2>
-      )}
-      {completedCourses?.length > 0 && (
-        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 xl:grid-cols-4 2xl:grid-cols-5 gap-4 items-start">
-          {completedCourses &&
-            completedCourses.map((course) => (
-              <CourseCard
-                key={course._id}
-                id={course._id}
-                title={course.title}
-                description={course.description}
-                instructorName={course.instructorName}
-              />
-            ))}
-        </div>
-      )}
-
-      {currentUser.role === "instructor"
-        ? pendingCoursesInstructor?.length > 0 && (
-            <h2 className="font-semibold text-lg mx-4 uppercase">
-              Pending Courses
-            </h2>
-          )
-        : pendingCoursesEnduser?.length > 0 && (
-            <h2 className="font-semibold text-lg mx-4 uppercase">
-              Pending Courses
-            </h2>
-          )}
-      {currentUser.role === "instructor"
-        ? pendingCoursesInstructor?.length > 0 && (
-            <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 xl:grid-cols-4 2xl:grid-cols-5 gap-4 items-start">
-              {pendingCoursesInstructor?.map((course) => (
-                <CourseCard
-                  key={course._id}
-                  id={course._id}
-                  title={course.title}
-                  description={course.description}
-                  instructorName={course.instructorName}
-                />
-              ))}
-            </div>
-          )
-        : pendingCoursesEnduser?.length > 0 && (
-            <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 xl:grid-cols-4 2xl:grid-cols-5 gap-4 items-start">
-              {pendingCoursesEnduser?.map((course) => (
-                <CourseCard
-                  key={course._id}
-                  id={course._id}
-                  title={course.title}
-                  description={course.description}
-                  instructorName={course.instructorName}
-                />
-              ))}
-            </div>
-          )}
-
-      {currentUser.role === "instructor"
-        ? ownedCourses?.length > 0 && (
-            <>
-              {ownedCourses?.length > 0 && (
-                <h2 className="font-semibold text-lg mx-4 uppercase">
-                  Owned Courses
-                </h2>
-              )}
+      {!showAddCourse && (
+        <>
+          {completedCourses?.length > 0 && (
+            <div>
+              <h2 className="font-semibold text-lg mx-4 uppercase">
+                Completed Courses
+              </h2>
               <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 xl:grid-cols-4 2xl:grid-cols-5 gap-4 items-start">
-                {ownedCourses &&
-                  ownedCourses?.map((course) => (
-                    <CourseCard
-                      key={course._id}
-                      id={course._id}
-                      title={course.title}
-                      description={course.description}
-                      instructorName={course.instructorName}
-                    />
-                  ))}
-              </div>
-            </>
-          )
-        : enrolledCourses?.length > 0 && (
-            <>
-              {enrolledCourses?.length > 0 && (
-                <h2 className="font-semibold text-lg mx-4 uppercase">
-                  Enrolled Courses
-                </h2>
-              )}
-              <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 xl:grid-cols-4 2xl:grid-cols-5 gap-4 items-start">
-                {enrolledCourses?.map((course) => (
+                {completedCourses.map((course) => (
                   <CourseCard
-                    key={course._id}
-                    id={course._id}
-                    title={course.title}
-                    description={course.description}
-                    instructorName={course.instructorName}
+                    key={course?._id}
+                    id={course?._id}
+                    title={course?.title}
+                    description={course?.description}
+                    instructorName={course?.instructor.name}
                   />
                 ))}
               </div>
-            </>
-          )}
-      {currentUser.role === "instructor"
-        ? ownedCourses?.length == 0 &&
-          pendingCoursesInstructor?.length == 0 &&
-          completedCourses?.length == 0 && (
-            <div className=" text-lg mx-4">
-              There is no Course available yet
-            </div>
-          )
-        : enrolledCourses?.length == 0 &&
-          pendingCoursesEnduser?.length == 0 &&
-          completedCourses?.length == 0 && (
-            <div className=" text-lg mx-4">
-              There is no Course available yet
             </div>
           )}
+
+          {currentUser.role === "instructor"
+            ? pendingCoursesInstructor?.length > 0 && (
+                <div>
+                  <h2 className="font-semibold text-lg mx-4 uppercase">
+                    Pending Courses
+                  </h2>
+                  <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 xl:grid-cols-4 2xl:grid-cols-5 gap-4 items-start">
+                    {pendingCoursesInstructor?.map((course) => (
+                      <CourseCard
+                        key={course?._id}
+                        id={course?._id}
+                        title={course?.title}
+                        description={course?.description}
+                        instructorName={course?.instructor.name}
+                      />
+                    ))}
+                  </div>
+                </div>
+              )
+            : pendingCoursesEnduser?.length > 0 && (
+                <div>
+                  <h2 className="font-semibold text-lg mx-4 uppercase">
+                    Pending Courses
+                  </h2>
+                  <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 xl:grid-cols-4 2xl:grid-cols-5 gap-4 items-start">
+                    {pendingCoursesEnduser?.map((course) => (
+                      <CourseCard
+                        key={course?._id}
+                        id={course?._id}
+                        title={course?.title}
+                        description={course?.description}
+                        instructorName={course?.instructor.name}
+                      />
+                    ))}
+                  </div>
+                </div>
+              )}
+
+          {currentUser.role === "instructor"
+            ? ownedCourses?.length > 0 && (
+                <div>
+                  <h2 className="font-semibold text-lg mx-4 uppercase">
+                    Owned Courses
+                  </h2>
+                  <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 xl:grid-cols-4 2xl:grid-cols-5 gap-4 items-start">
+                    {ownedCourses.map((course) => (
+                      <CourseCard
+                        key={course?._id}
+                        id={course?._id}
+                        title={course?.title}
+                        description={course?.description}
+                        instructorName={course?.instructor.name}
+                      />
+                    ))}
+                  </div>
+                </div>
+              )
+            : enrolledCourses?.length > 0 && (
+                <div>
+                  <h2 className="font-semibold text-lg mx-4 uppercase">
+                    Enrolled Courses
+                  </h2>
+                  <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 xl:grid-cols-4 2xl:grid-cols-5 gap-4 items-start">
+                    {enrolledCourses?.map((course) => (
+                      <CourseCard
+                        key={course?._id}
+                        id={course?._id}
+                        title={course?.title}
+                        description={course?.description}
+                        instructorName={course?.instructor.name}
+                      />
+                    ))}
+                  </div>
+                </div>
+              )}
+
+          {currentUser.role === "instructor"
+            ? ownedCourses?.length === 0 &&
+              pendingCoursesInstructor?.length === 0 &&
+              completedCourses?.length === 0 && (
+                <div className="text-lg mx-4 text-red-700">
+                  There are no Courses available yet
+                </div>
+              )
+            : enrolledCourses?.length === 0 &&
+              pendingCoursesEnduser?.length === 0 &&
+              completedCourses?.length === 0 && (
+                <div className="text-lg mx-4 text-red-700">
+                  There are no Courses available yet
+                </div>
+              )}
+        </>
+      )}
     </div>
   );
 }

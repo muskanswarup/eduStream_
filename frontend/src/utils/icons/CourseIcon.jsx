@@ -26,3 +26,5 @@ const CourseIcon = (props) => (
 );
 
 export default CourseIcon;
+
+

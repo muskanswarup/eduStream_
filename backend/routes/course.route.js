@@ -29,16 +29,7 @@ courseRouter.put(
   verifyEnduser,
   enrollCourse
 );
-courseRouter.put(
-  "/complete_course/:id",
-  verifyToken,
-  completeCourse
-);
-courseRouter.delete(
-  "/delete_course/:id",
-  verifyToken,
-  verifyInstructor,
-  deleteCourse
-);
+courseRouter.put("/complete_course/:id", verifyToken, completeCourse);
+courseRouter.delete("/delete_course/:id", verifyToken, deleteCourse);
 
 export { courseRouter };
