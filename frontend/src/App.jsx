@@ -33,7 +33,7 @@ function App() {
           Authorization: `Bearer ${token}`,
         };
         const res = await axios.get(
-          "http://localhost:3000/course/get_courses",
+          "https://edu-stream-backend-delta.vercel.app/course/get_courses",
           {
             method: "GET",
             headers: headers,
@@ -53,7 +53,7 @@ function App() {
           Authorization: `Bearer ${token}`,
         };
         const res = await axios.get(
-          `http://localhost:3000/user/get_user/${currentUser._id}`,
+          `https://edu-stream-backend-delta.vercel.app/user/get_user/${currentUser._id}`,
           {
             method: "GET",
             headers: headers,

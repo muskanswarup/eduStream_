@@ -83,7 +83,7 @@ export default function MyCourses({ courseData, userData, setRender, render }) {
       Authorization: `Bearer ${token}`,
     };
     try {
-      await axios.post("http://localhost:3000/course/create_course", data, {
+      await axios.post("https://edu-stream-backend-delta.vercel.app/course/create_course", data, {
         method: "POST",
         headers: headers,
       });

@@ -14,7 +14,7 @@ export default function Login({ render, setRender}) {
     e.preventDefault();
     dispatch(logInStart());
     try {
-      const res = await axios.post("http://localhost:3000/api/login", { email, password }, {
+      const res = await axios.post("https://edu-stream-backend-delta.vercel.app/api/login", { email, password }, {
         headers: {
           "Content-Type": "application/json",
         },

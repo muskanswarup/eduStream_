@@ -20,7 +20,7 @@ export default function ContentCard({
       Authorization: `Bearer ${token}`,
     };
     try {
-      await axios.delete(`http://localhost:3000/content/delete_content/${id}`, {
+      await axios.delete(`https://edu-stream-backend-delta.vercel.app/content/delete_content/${id}`, {
         method: "DELETE",
         headers: headers,
       });
@@ -38,7 +38,7 @@ export default function ContentCard({
         Authorization: `Bearer ${token}`,
       };
       await axios.put(
-        `http://localhost:3000/content/watched_content/${id}`,
+        `https://edu-stream-backend-delta.vercel.app/content/watched_content/${id}`,
         {},
         {
           method: "PUT",

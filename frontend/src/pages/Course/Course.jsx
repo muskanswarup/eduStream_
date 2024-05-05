@@ -49,7 +49,7 @@ export default function Course({ courseData, userData, setRender, render }) {
     };
     try {
       const res = await axios.post(
-        `http://localhost:3000/content/add_content/${courseId}`,
+        `https://edu-stream-backend-delta.vercel.app/content/add_content/${courseId}`,
         data,
         {
           method: "POST",
@@ -73,7 +73,7 @@ export default function Course({ courseData, userData, setRender, render }) {
         Authorization: `Bearer ${token}`,
       };
       await axios.put(
-        `http://localhost:3000/course/enroll_course/${courseId}`,
+        `https://edu-stream-backend-delta.vercel.app/course/enroll_course/${courseId}`,
         {},
         {
           method: "PUT",
@@ -94,7 +94,7 @@ export default function Course({ courseData, userData, setRender, render }) {
         Authorization: `Bearer ${token}`,
       };
       await axios.put(
-        `http://localhost:3000/course/complete_course/${courseId}`,
+        `https://edu-stream-backend-delta.vercel.app/course/complete_course/${courseId}`,
         {},
         {
           method: "PUT",
