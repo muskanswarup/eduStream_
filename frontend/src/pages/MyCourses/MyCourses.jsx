@@ -150,7 +150,7 @@ export default function MyCourses({ courseData, userData, setRender, render }) {
                         id="tags"
                         value={tags}
                         onChange={handleTagChange}
-                        required
+                      
                         placeholder="Enter tags 1 by 1"
                         className="bg-gray-100 focus:outline-none hidden md:block"
                       ></input>
