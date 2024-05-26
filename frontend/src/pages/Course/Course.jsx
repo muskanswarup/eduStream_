@@ -108,7 +108,7 @@ export default function Course({ courseData, userData, setRender, render }) {
   };
 
   return (
-    <div className="m-2 sm:m-4 flex flex-col gap-2">
+    <div className="flex-1 m-2 sm:m-4 flex flex-col gap-2">
       {currentUser._id ===
         courseData?.find((course) => course._id === courseId)?.instructor
           ?._id && (
