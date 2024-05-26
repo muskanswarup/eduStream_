@@ -90,10 +90,14 @@ export default function MyCourses({ courseData, userData, setRender, render }) {
       Authorization: `Bearer ${token}`,
     };
     try {
-      await axios.post("https://edu-stream-backend-delta.vercel.app/course/create_course", data, {
-        method: "POST",
-        headers: headers,
-      });
+      await axios.post(
+        "https://edu-stream-backend-delta.vercel.app/course/create_course",
+        data,
+        {
+          method: "POST",
+          headers: headers,
+        }
+      );
       setRender(!render);
     } catch (error) {
       console.log(error);
@@ -204,18 +208,17 @@ export default function MyCourses({ courseData, userData, setRender, render }) {
         <>
           {completedCourses?.length > 0 && (
             <>
-              <h2 className="flex items-center justify-between px-2 font-semibold text-lg uppercase border rounded-lg bg-gray-100 border-gray-300 md:rounded-[4px] shadow-sm h-9 w-full mb-2">
-                Completed Courses
+              <h2
+                onClick={() => setShowCompletedCourses(!showCompletedCourses)}
+                className="group flex items-center justify-between px-2 font-semibold text-lg uppercase border rounded-lg bg-gray-100 border-gray-300 md:rounded-[4px] shadow-sm h-9 w-full mb-2 hover:bg-gray-50 hover:cursor-pointer"
+              >
+                <span className="group-hover:text-purple-700">
+                  Completed Courses
+                </span>
                 {showCompletedCourses ? (
-                  <UpArrow
-                    onClick={() => setShowCompletedCourses(false)}
-                    className="hover:cursor-pointer hover:text-purple-700"
-                  />
+                  <UpArrow className="hover:cursor-pointer group-hover:text-purple-700" />
                 ) : (
-                  <DownArrow
-                    onClick={() => setShowCompletedCourses(true)}
-                    className="hover:cursor-pointer hover:text-purple-700"
-                  />
+                  <DownArrow className="hover:cursor-pointer group-hover:text-purple-700" />
                 )}
               </h2>
               {showCompletedCourses && (
@@ -237,17 +240,19 @@ export default function MyCourses({ courseData, userData, setRender, render }) {
           {currentUser.role === "instructor"
             ? pendingCoursesInstructor?.length > 0 && (
                 <>
-                  <h2 className="flex items-center justify-between px-2 font-semibold text-lg uppercase border rounded-lg bg-gray-100 border-gray-300 md:rounded-[4px] shadow-sm h-9 w-full mb-2">
-                    Pending Courses
+                  <h2
+                    onClick={() => setShowPendingCourses(!showPendingCourses)}
+                    className="group flex items-center justify-between px-2 font-semibold text-lg uppercase border rounded-lg bg-gray-100 border-gray-300 md:rounded-[4px] shadow-sm h-9 w-full mb-2 hover:bg-gray-50 hover:cursor-pointer"
+                  >
+                    <span className="group-hover:text-purple-700">
+                      Pending Courses
+                    </span>
                     {showPendingCourses ? (
-                      <UpArrow
-                        onClick={() => setShowPendingCourses(false)}
-                        className="hover:cursor-pointer hover:text-purple-700"
-                      />
+                      <UpArrow className="hover:cursor-pointer group-hover:text-purple-700" />
                     ) : (
                       <DownArrow
                         onClick={() => setShowPendingCourses(true)}
-                        className="hover:cursor-pointer hover:text-purple-700"
+                        className="hover:cursor-pointer group-hover:text-purple-700"
                       />
                     )}
                   </h2>
@@ -268,18 +273,17 @@ export default function MyCourses({ courseData, userData, setRender, render }) {
               )
             : pendingCoursesEnduser?.length > 0 && (
                 <>
-                  <h2 className="flex items-center justify-between px-2 font-semibold text-lg uppercase border rounded-lg bg-gray-100 border-gray-300 md:rounded-[4px] shadow-sm h-9 w-full mb-2">
-                    Pending Courses
+                  <h2
+                    onClick={() => setShowPendingCourses(!showPendingCourses)}
+                    className=" group flex items-center justify-between px-2 font-semibold text-lg uppercase border rounded-lg bg-gray-100 border-gray-300 md:rounded-[4px] shadow-sm h-9 w-full mb-2 hover:bg-gray-50 hover:cursor-pointer"
+                  >
+                    <span className="group-hover:text-purple-700">
+                      Pending Courses
+                    </span>
                     {showPendingCourses ? (
-                      <UpArrow
-                        onClick={() => setShowPendingCourses(false)}
-                        className="hover:cursor-pointer hover:text-purple-700"
-                      />
+                      <UpArrow className="hover:cursor-pointer group-hover:text-purple-700" />
                     ) : (
-                      <DownArrow
-                        onClick={() => setShowPendingCourses(true)}
-                        className="hover:cursor-pointer hover:text-purple-700"
-                      />
+                      <DownArrow className="hover:cursor-pointer group-hover:text-purple-700" />
                     )}
                   </h2>
                   {showPendingCourses && (
@@ -301,18 +305,19 @@ export default function MyCourses({ courseData, userData, setRender, render }) {
           {currentUser.role === "instructor"
             ? ownedCourses?.length > 0 && (
                 <>
-                  <h2 className="flex items-center justify-between px-2 font-semibold text-lg uppercase border rounded-lg bg-gray-100 border-gray-300 md:rounded-[4px] shadow-sm h-9 w-full mb-2">
-                    Owned Courses
+                  <h2
+                    onClick={() =>
+                      setShowOwnedEnrolledCourses(!showOwnedEnrolledCourses)
+                    }
+                    className=" group flex items-center justify-between px-2 font-semibold text-lg uppercase border rounded-lg bg-gray-100 border-gray-300 md:rounded-[4px] shadow-sm h-9 w-full mb-2 hover:cursor-pointer hover:bg-gray-50"
+                  >
+                    <span className="group-hover:text-purple-700">
+                      Owned Courses
+                    </span>
                     {showOwnedEnrolledCourses ? (
-                      <UpArrow
-                        onClick={() => setShowOwnedEnrolledCourses(false)}
-                        className="hover:cursor-pointer hover:text-purple-700"
-                      />
+                      <UpArrow className="hover:cursor-pointer group-hover:text-purple-700" />
                     ) : (
-                      <DownArrow
-                        onClick={() => setShowOwnedEnrolledCourses(true)}
-                        className="hover:cursor-pointer hover:text-purple-700"
-                      />
+                      <DownArrow className="hover:cursor-pointer group-hover:text-purple-700" />
                     )}
                   </h2>
                   {showOwnedEnrolledCourses && (
@@ -332,18 +337,19 @@ export default function MyCourses({ courseData, userData, setRender, render }) {
               )
             : enrolledCourses?.length > 0 && (
                 <>
-                  <h2 className="flex items-center justify-between px-2 font-semibold text-lg uppercase border rounded-lg bg-gray-100 border-gray-300 md:rounded-[4px] shadow-sm h-9 w-full mb-2">
-                    Enrolled Courses
+                  <h2
+                    onClick={() =>
+                      setShowOwnedEnrolledCourses(!showOwnedEnrolledCourses)
+                    }
+                    className="group flex items-center justify-between px-2 font-semibold text-lg uppercase border rounded-lg bg-gray-100 border-gray-300 md:rounded-[4px] shadow-sm h-9 w-full mb-2 hover:cursor-pointer hover:bg-gray-50"
+                  >
+                    <span className="group-hover:text-purple-700">
+                      Enrolled Courses
+                    </span>
                     {showOwnedEnrolledCourses ? (
-                      <UpArrow
-                        onClick={() => setShowOwnedEnrolledCourses(false)}
-                        className="hover:cursor-pointer hover:text-purple-700"
-                      />
+                      <UpArrow className="hover:cursor-pointer group-hover:text-purple-700" />
                     ) : (
-                      <DownArrow
-                        onClick={() => setShowOwnedEnrolledCourses(true)}
-                        className="hover:cursor-pointer hover:text-purple-700"
-                      />
+                      <DownArrow className="hover:cursor-pointer group-hover:text-purple-700" />
                     )}
                   </h2>
                   {showOwnedEnrolledCourses && (
