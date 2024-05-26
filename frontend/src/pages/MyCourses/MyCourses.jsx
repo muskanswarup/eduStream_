@@ -2,6 +2,8 @@ import axios from "axios";
 import React, { useEffect, useState } from "react";
 import { useSelector } from "react-redux";
 import CourseCard from "./CourseCard/CourseCard";
+import UpArrow from "../../utils/icons/UpArrow";
+import DownArrow from "../../utils/icons/DownArrow";
 
 export default function MyCourses({ courseData, userData, setRender, render }) {
   const { currentUser } = useSelector((state) => state.user);
@@ -16,6 +18,11 @@ export default function MyCourses({ courseData, userData, setRender, render }) {
   const [completedCourses, setCompletedCourses] = useState([]);
   const [enrolledCourses, setEnrolledCourses] = useState([]);
   const [ownedCourses, setOwnedCourses] = useState([]);
+
+  const [showCompletedCourses, setShowCompletedCourses] = useState(true);
+  const [showPendingCourses, setShowPendingCourses] = useState(true);
+  const [showOwnedEnrolledCourses, setShowOwnedEnrolledCourses] =
+    useState(true);
 
   useEffect(() => {
     if (userData && courseData) {
@@ -98,12 +105,12 @@ export default function MyCourses({ courseData, userData, setRender, render }) {
   };
 
   return (
-    <div className="m-2 sm:m-4 flex flex-col gap-2">
+    <div className="flex-1 m-2 sm:m-4">
       {currentUser.role === "instructor" && (
         <>
           <button
             onClick={() => setShowAddCourse(!showAddCourse)}
-            className="border hover:bg-purple-700 rounded-lg hover:text-white font-semibold bg-gray-100 border-gray-300 md:rounded-[4px] text-sm px-3 shadow-sm h-9 "
+            className="border hover:bg-purple-700 rounded-lg hover:text-white font-semibold bg-gray-100 border-gray-300 md:rounded-[4px] text-sm px-3 shadow-sm h-9 w-full mb-2"
           >
             {showAddCourse ? "Hide Add Course" : "Show Add Course"}
           </button>
@@ -197,97 +204,162 @@ export default function MyCourses({ courseData, userData, setRender, render }) {
         <>
           {completedCourses?.length > 0 && (
             <>
-              <h2 className="font-semibold text-lg sm:mx-4 uppercase">
+              <h2 className="flex items-center justify-between px-2 font-semibold text-lg uppercase border rounded-lg bg-gray-100 border-gray-300 md:rounded-[4px] shadow-sm h-9 w-full mb-2">
                 Completed Courses
-              </h2>
-              <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 xl:grid-cols-4 2xl:grid-cols-5 gap-4 items-start">
-                {completedCourses.map((course) => (
-                  <CourseCard
-                    key={course?._id}
-                    id={course?._id}
-                    title={course?.title}
-                    description={course?.description}
-                    instructorName={course?.instructor.name}
+                {showCompletedCourses ? (
+                  <UpArrow
+                    onClick={() => setShowCompletedCourses(false)}
+                    className="hover:cursor-pointer hover:text-purple-700"
                   />
-                ))}
-              </div>
+                ) : (
+                  <DownArrow
+                    onClick={() => setShowCompletedCourses(true)}
+                    className="hover:cursor-pointer hover:text-purple-700"
+                  />
+                )}
+              </h2>
+              {showCompletedCourses && (
+                <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 xl:grid-cols-4 2xl:grid-cols-5 gap-4 items-start">
+                  {completedCourses.map((course) => (
+                    <CourseCard
+                      key={course?._id}
+                      id={course?._id}
+                      title={course?.title}
+                      description={course?.description}
+                      instructorName={course?.instructor.name}
+                    />
+                  ))}
+                </div>
+              )}
             </>
           )}
 
           {currentUser.role === "instructor"
             ? pendingCoursesInstructor?.length > 0 && (
-                <div>
-                  <h2 className="font-semibold text-lg mx-4 uppercase">
+                <>
+                  <h2 className="flex items-center justify-between px-2 font-semibold text-lg uppercase border rounded-lg bg-gray-100 border-gray-300 md:rounded-[4px] shadow-sm h-9 w-full mb-2">
                     Pending Courses
-                  </h2>
-                  <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 xl:grid-cols-4 2xl:grid-cols-5 gap-4 items-start">
-                    {pendingCoursesInstructor?.map((course) => (
-                      <CourseCard
-                        key={course?._id}
-                        id={course?._id}
-                        title={course?.title}
-                        description={course?.description}
-                        instructorName={course?.instructor.name}
+                    {showPendingCourses ? (
+                      <UpArrow
+                        onClick={() => setShowPendingCourses(false)}
+                        className="hover:cursor-pointer hover:text-purple-700"
                       />
-                    ))}
-                  </div>
-                </div>
+                    ) : (
+                      <DownArrow
+                        onClick={() => setShowPendingCourses(true)}
+                        className="hover:cursor-pointer hover:text-purple-700"
+                      />
+                    )}
+                  </h2>
+                  {showPendingCourses && (
+                    <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 xl:grid-cols-4 2xl:grid-cols-5 gap-4 items-start">
+                      {pendingCoursesInstructor?.map((course) => (
+                        <CourseCard
+                          key={course?._id}
+                          id={course?._id}
+                          title={course?.title}
+                          description={course?.description}
+                          instructorName={course?.instructor.name}
+                        />
+                      ))}
+                    </div>
+                  )}
+                </>
               )
             : pendingCoursesEnduser?.length > 0 && (
-                <div>
-                  <h2 className="font-semibold text-lg mx-4 uppercase">
+                <>
+                  <h2 className="flex items-center justify-between px-2 font-semibold text-lg uppercase border rounded-lg bg-gray-100 border-gray-300 md:rounded-[4px] shadow-sm h-9 w-full mb-2">
                     Pending Courses
-                  </h2>
-                  <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 xl:grid-cols-4 2xl:grid-cols-5 gap-4 items-start">
-                    {pendingCoursesEnduser?.map((course) => (
-                      <CourseCard
-                        key={course?._id}
-                        id={course?._id}
-                        title={course?.title}
-                        description={course?.description}
-                        instructorName={course?.instructor.name}
+                    {showPendingCourses ? (
+                      <UpArrow
+                        onClick={() => setShowPendingCourses(false)}
+                        className="hover:cursor-pointer hover:text-purple-700"
                       />
-                    ))}
-                  </div>
-                </div>
+                    ) : (
+                      <DownArrow
+                        onClick={() => setShowPendingCourses(true)}
+                        className="hover:cursor-pointer hover:text-purple-700"
+                      />
+                    )}
+                  </h2>
+                  {showPendingCourses && (
+                    <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 xl:grid-cols-4 2xl:grid-cols-5 gap-4 items-start">
+                      {pendingCoursesEnduser?.map((course) => (
+                        <CourseCard
+                          key={course?._id}
+                          id={course?._id}
+                          title={course?.title}
+                          description={course?.description}
+                          instructorName={course?.instructor.name}
+                        />
+                      ))}
+                    </div>
+                  )}
+                </>
               )}
 
           {currentUser.role === "instructor"
             ? ownedCourses?.length > 0 && (
-                <div>
-                  <h2 className="font-semibold text-lg mx-4 uppercase">
+                <>
+                  <h2 className="flex items-center justify-between px-2 font-semibold text-lg uppercase border rounded-lg bg-gray-100 border-gray-300 md:rounded-[4px] shadow-sm h-9 w-full mb-2">
                     Owned Courses
-                  </h2>
-                  <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 xl:grid-cols-4 2xl:grid-cols-5 gap-4 items-start">
-                    {ownedCourses.map((course) => (
-                      <CourseCard
-                        key={course?._id}
-                        id={course?._id}
-                        title={course?.title}
-                        description={course?.description}
-                        instructorName={course?.instructor.name}
+                    {showOwnedEnrolledCourses ? (
+                      <UpArrow
+                        onClick={() => setShowOwnedEnrolledCourses(false)}
+                        className="hover:cursor-pointer hover:text-purple-700"
                       />
-                    ))}
-                  </div>
-                </div>
+                    ) : (
+                      <DownArrow
+                        onClick={() => setShowOwnedEnrolledCourses(true)}
+                        className="hover:cursor-pointer hover:text-purple-700"
+                      />
+                    )}
+                  </h2>
+                  {showOwnedEnrolledCourses && (
+                    <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 xl:grid-cols-4 2xl:grid-cols-5 gap-4 items-start">
+                      {ownedCourses.map((course) => (
+                        <CourseCard
+                          key={course?._id}
+                          id={course?._id}
+                          title={course?.title}
+                          description={course?.description}
+                          instructorName={course?.instructor.name}
+                        />
+                      ))}
+                    </div>
+                  )}
+                </>
               )
             : enrolledCourses?.length > 0 && (
-                <div>
-                  <h2 className="font-semibold text-lg mx-4 uppercase">
+                <>
+                  <h2 className="flex items-center justify-between px-2 font-semibold text-lg uppercase border rounded-lg bg-gray-100 border-gray-300 md:rounded-[4px] shadow-sm h-9 w-full mb-2">
                     Enrolled Courses
-                  </h2>
-                  <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 xl:grid-cols-4 2xl:grid-cols-5 gap-4 items-start">
-                    {enrolledCourses?.map((course) => (
-                      <CourseCard
-                        key={course?._id}
-                        id={course?._id}
-                        title={course?.title}
-                        description={course?.description}
-                        instructorName={course?.instructor.name}
+                    {showOwnedEnrolledCourses ? (
+                      <UpArrow
+                        onClick={() => setShowOwnedEnrolledCourses(false)}
+                        className="hover:cursor-pointer hover:text-purple-700"
                       />
-                    ))}
-                  </div>
-                </div>
+                    ) : (
+                      <DownArrow
+                        onClick={() => setShowOwnedEnrolledCourses(true)}
+                        className="hover:cursor-pointer hover:text-purple-700"
+                      />
+                    )}
+                  </h2>
+                  {showOwnedEnrolledCourses && (
+                    <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 xl:grid-cols-4 2xl:grid-cols-5 gap-4 items-start">
+                      {enrolledCourses?.map((course) => (
+                        <CourseCard
+                          key={course?._id}
+                          id={course?._id}
+                          title={course?.title}
+                          description={course?.description}
+                          instructorName={course?.instructor.name}
+                        />
+                      ))}
+                    </div>
+                  )}
+                </>
               )}
 
           {currentUser.role === "instructor"

@@ -4,7 +4,7 @@ import { useSelector } from "react-redux";
 export default function Profile() {
   const { currentUser } = useSelector((state) => state.user);
   return (
-    <div className="flex flex-col items-center m-8 ">
+    <div className="flex-1 flex flex-col items-center m-8 ">
       <div className="flex flex-col gap-2">
         <img
           src="/cutepfp.jpg"

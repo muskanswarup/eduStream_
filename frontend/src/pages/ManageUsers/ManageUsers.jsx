@@ -2,10 +2,16 @@ import React, { useEffect, useState } from "react";
 import UserCard from "./UserCard.jsx/UserCard";
 import axios from "axios";
 import { useSelector } from "react-redux";
+import UpArrow from "../../utils/icons/UpArrow";
+import DownArrow from "../../utils/icons/DownArrow";
 
 export default function ManageUsers({ render, setRender }) {
   const { currentUser } = useSelector((state) => state.user);
   const [userData, setUserData] = useState([]);
+
+  const [showInstructor, setShowInstructor] = useState(true);
+  const [showEndUser, setShowEndUser] = useState(true);
+
   useEffect(() => {
     const fetchUserData = async () => {
       try {
@@ -26,54 +32,80 @@ export default function ManageUsers({ render, setRender }) {
       }
     };
     fetchUserData();
-  },[render]);
+  }, [render]);
   return (
-    <div className="m-2 sm:m-4 flex flex-col gap-2">
+    <div className="flex-1 m-2 sm:m-4 flex flex-col gap-2">
       {userData.length > 0 ? (
         <>
           {userData.some((user) => user.role === "instructor") && (
             <>
-              <h2 className="font-semibold text-lg sm:mx-4 uppercase ">
+              <h2 className="flex items-center justify-between px-2 font-semibold text-lg uppercase border rounded-lg bg-gray-100 border-gray-300 md:rounded-[4px] shadow-sm h-9 w-full">
                 Instructors
+                {showInstructor ? (
+                  <UpArrow
+                    onClick={() => setShowInstructor(false)}
+                    className="hover:cursor-pointer hover:text-purple-700"
+                  />
+                ) : (
+                  <DownArrow
+                    onClick={() => setShowInstructor(true)}
+                    className="hover:cursor-pointer hover:text-purple-700"
+                  />
+                )}
               </h2>
 
-              <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 xl:grid-cols-4 2xl:grid-cols-5 gap-4 items-start">
-                {userData.map(
-                  (user) =>
-                    currentUser._id !== user._id &&
-                    user.role === "instructor" && (
-                      <UserCard
-                        key={user._id}
-                        user={user}
-                        render={render}
-                        setRender={setRender}
-                      />
-                    )
-                )}
-              </div>
+              {showInstructor && (
+                <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 xl:grid-cols-4 2xl:grid-cols-5 gap-4 items-start">
+                  {userData.map(
+                    (user) =>
+                      currentUser._id !== user._id &&
+                      user.role === "instructor" && (
+                        <UserCard
+                          key={user._id}
+                          user={user}
+                          render={render}
+                          setRender={setRender}
+                        />
+                      )
+                  )}
+                </div>
+              )}
             </>
           )}
 
           {userData.some((user) => user.role === "enduser") && (
             <>
-              <h2 className="font-semibold text-lg sm:mx-4 uppercase mt-2">
+              <h2 className="flex items-center justify-between px-2 font-semibold text-lg uppercase border rounded-lg bg-gray-100 border-gray-300 md:rounded-[4px] shadow-sm h-9">
                 EndUsers
+                {showEndUser ? (
+                  <UpArrow
+                    onClick={() => setShowEndUser(false)}
+                    className="hover:cursor-pointer hover:text-purple-700"
+                  />
+                ) : (
+                  <DownArrow
+                    onClick={() => setShowEndUser(true)}
+                    className="hover:cursor-pointer hover:text-purple-700"
+                  />
+                )}
               </h2>
 
-              <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 xl:grid-cols-4 2xl:grid-cols-5 gap-4 items-start">
-                {userData.map(
-                  (user) =>
-                    currentUser._id !== user._id &&
-                    user.role === "enduser" && (
-                      <UserCard
-                        key={user._id}
-                        user={user}
-                        render={render}
-                        setRender={setRender}
-                      />
-                    )
-                )}
-              </div>
+              {showEndUser && (
+                <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 xl:grid-cols-4 2xl:grid-cols-5 gap-4 items-start">
+                  {userData.map(
+                    (user) =>
+                      currentUser._id !== user._id &&
+                      user.role === "enduser" && (
+                        <UserCard
+                          key={user._id}
+                          user={user}
+                          render={render}
+                          setRender={setRender}
+                        />
+                      )
+                  )}
+                </div>
+              )}
             </>
           )}
         </>

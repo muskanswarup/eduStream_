@@ -1,46 +1,52 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import axios from 'axios';
-import { logInFailure, logInStart, logInSuccess } from "../../redux/user/userSlice";
+import axios from "axios";
+import {
+  logInFailure,
+  logInStart,
+  logInSuccess,
+} from "../../redux/user/userSlice";
 import { useDispatch } from "react-redux";
 
-export default function Login({ render, setRender}) {
-  const navigate = useNavigate()
-  const dispatch = useDispatch()
-  const [email, setEmail] = useState('');
-  const [password, setPassword] = useState('');
+export default function Login({ render, setRender }) {
+  const navigate = useNavigate();
+  const dispatch = useDispatch();
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
 
   const handleSubmit = async (e) => {
     e.preventDefault();
     dispatch(logInStart());
     try {
-      const res = await axios.post("https://edu-stream-backend-delta.vercel.app/api/login", { email, password }, {
-        headers: {
-          "Content-Type": "application/json",
-        },
-      });
+      const res = await axios.post(
+        "https://edu-stream-backend-delta.vercel.app/api/login",
+        { email, password },
+        {
+          headers: {
+            "Content-Type": "application/json",
+          },
+        }
+      );
       const data = res.data;
       if (data.success === false) {
         dispatch(logInFailure(data.message));
         return;
       }
       dispatch(logInSuccess(data));
-      setRender(!render)
+      setRender(!render);
       navigate("/");
     } catch (error) {
-      dispatch(logInFailure(error.message))
+      dispatch(logInFailure(error.message));
     }
-  } 
- 
+  };
+
   return (
-    <div className="flex items-center justify-center mt-12">
+    <div className="flex-1 flex items-center justify-center">
       <form
         onSubmit={handleSubmit}
-        className="bg-gray-100 p-8 rounded-lg shadow-sm"
+        className="p-4 flex flex-col gap-2  w-96 border bg-gray-100 rounded-lg border-gray-300"
       >
-        <h2 className="text-2xl font-bold mb-4">
-          Login
-        </h2>
+        <h2 className="text-2xl font-bold mb-4">Login</h2>
         <div className="mb-4">
           <label
             htmlFor="email"
@@ -80,16 +86,16 @@ export default function Login({ render, setRender}) {
           >
             Login
           </button>
-          <p className="text-gray-600 text-xs">
-            Need an account?
+          <div className="flex justify-between items-center w-full">
+            <p className="text-gray-600 text-sm">Need an account?</p>
             <button
               type="button"
               onClick={() => navigate("/signup")}
-              className="text-blue-500 focus:outline-none"
+              className="text-blue-500 focus:outline-none text-sm"
             >
               Sign Up
             </button>
-          </p>
+          </div>
         </div>
       </form>
     </div>

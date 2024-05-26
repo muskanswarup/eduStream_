@@ -1,26 +1,34 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import axios from 'axios';
-import { signInFailure, signInStart, signInSuccess } from "../../redux/user/userSlice";
+import axios from "axios";
+import {
+  signInFailure,
+  signInStart,
+  signInSuccess,
+} from "../../redux/user/userSlice";
 import { useDispatch } from "react-redux";
 
 export default function Signup() {
-  const navigate = useNavigate()
-  const dispatch = useDispatch()
-  const [email, setEmail] = useState('');
-  const [name, setName] = useState('');
-  const [password, setPassword] = useState('');
-  const [role, setRole] = useState('');
+  const navigate = useNavigate();
+  const dispatch = useDispatch();
+  const [email, setEmail] = useState("");
+  const [name, setName] = useState("");
+  const [password, setPassword] = useState("");
+  const [role, setRole] = useState("");
 
   const handleSubmit = async (e) => {
     e.preventDefault();
     dispatch(signInStart());
     try {
-      const res = await axios.post("https://edu-stream-backend-delta.vercel.app/api/signup", { name, email, password, role }, {
-        headers: {
-          "Content-Type": "application/json",
-        },
-      });
+      const res = await axios.post(
+        "https://edu-stream-backend-delta.vercel.app/api/signup",
+        { name, email, password, role },
+        {
+          headers: {
+            "Content-Type": "application/json",
+          },
+        }
+      );
       const data = res.data;
       if (data.success === false) {
         dispatch(signInFailure(data.message));
@@ -29,19 +37,17 @@ export default function Signup() {
       dispatch(signInSuccess(data));
       navigate("/login");
     } catch (error) {
-      dispatch(signInFailure(error.message))
+      dispatch(signInFailure(error.message));
     }
-  } 
- 
+  };
+
   return (
-    <div className="flex items-center justify-center mt-12">
+    <div className="flex-1 flex items-center justify-center">
       <form
         onSubmit={handleSubmit}
-        className="bg-gray-100 p-8 rounded-lg shadow-sm"
+        className="p-4 flex flex-col gap-2  w-96 border bg-gray-100 rounded-lg border-gray-300"
       >
-        <h2 className="text-2xl font-bold mb-4">
-          Signup
-        </h2>
+        <h2 className="text-2xl font-bold mb-4">Signup</h2>
         <div className="mb-4">
           <label
             htmlFor="name"
@@ -105,7 +111,6 @@ export default function Signup() {
           >
             <option value="enduser">Enduser</option>
             <option value="instructor">Instructor</option>
-            <option value="admin">Admin</option>
           </select>
         </div>
         <div className="flex flex-col items-center gap-y-4 mb-4">
@@ -115,16 +120,16 @@ export default function Signup() {
           >
             Sign Up
           </button>
-          <p className="text-gray-600 text-xs">
-            Already Have an account?
+          <div className="flex justify-between items-center w-full">
+            <p className="text-gray-600 text-sm">Already Have an account?</p>
             <button
               type="button"
               onClick={() => navigate("/login")}
-              className="text-blue-500 focus:outline-none"
+              className="text-blue-500 focus:outline-none text-sm"
             >
               Log In
             </button>
-          </p>
+          </div>
         </div>
       </form>
     </div>
