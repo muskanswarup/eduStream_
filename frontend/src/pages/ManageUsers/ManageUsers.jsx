@@ -41,13 +41,13 @@ export default function ManageUsers({ render, setRender }) {
             <>
               <h2
                 onClick={() => setShowInstructor(!showInstructor)}
-                className="flex w-full mb-2 items-center justify-between px-2 font-semibold text-lg uppercase border rounded-lg bg-gray-100 border-gray-300 md:rounded-[4px] shadow-sm h-9 hover:cursor-pointer"
+                className="group flex w-full mb-2 items-center justify-between px-2 font-semibold text-lg uppercase border rounded-lg bg-gray-100 border-gray-300 md:rounded-[4px] shadow-sm h-9 hover:cursor-pointer hover:bg-gray-50"
               >
-                Instructors
+                <span className="group-hover:text-purple-700">Instructors</span>
                 {showInstructor ? (
-                  <UpArrow className="hover:cursor-pointer hover:text-purple-700" />
+                  <UpArrow className="hover:cursor-pointer group-hover:text-purple-700" />
                 ) : (
-                  <DownArrow className="hover:cursor-pointer hover:text-purple-700" />
+                  <DownArrow className="hover:cursor-pointer group-hover:text-purple-700" />
                 )}
               </h2>
 
@@ -74,13 +74,13 @@ export default function ManageUsers({ render, setRender }) {
             <>
               <h2
                 onClick={() => setShowEndUser(!showEndUser)}
-                className="flex w-full mb-2 items-center justify-between px-2 font-semibold text-lg uppercase border rounded-lg bg-gray-100 border-gray-300 md:rounded-[4px] shadow-sm h-9 hover:cursor-pointer"
+                className="group flex w-full mb-2 items-center justify-between px-2 font-semibold text-lg uppercase border rounded-lg bg-gray-100 border-gray-300 md:rounded-[4px] shadow-sm h-9 hover:cursor-pointer hover:bg-gray-50"
               >
-                EndUsers
+                <span className="group-hover:text-purple-700">EndUsers</span>
                 {showEndUser ? (
-                  <UpArrow className="hover:cursor-pointer hover:text-purple-700" />
+                  <UpArrow className="hover:cursor-pointer group-hover:text-purple-700" />
                 ) : (
-                  <DownArrow className="hover:cursor-pointer hover:text-purple-700" />
+                  <DownArrow className="hover:cursor-pointer group-hover:text-purple-700" />
                 )}
               </h2>
 
