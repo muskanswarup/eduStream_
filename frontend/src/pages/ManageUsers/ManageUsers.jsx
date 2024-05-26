@@ -34,12 +34,12 @@ export default function ManageUsers({ render, setRender }) {
     fetchUserData();
   }, [render]);
   return (
-    <div className="flex-1 m-2 sm:m-4 flex flex-col gap-2">
+    <div className="flex-1 m-2 sm:m-4 gap-2">
       {userData.length > 0 ? (
         <>
           {userData.some((user) => user.role === "instructor") && (
             <>
-              <h2 className="flex items-center justify-between px-2 font-semibold text-lg uppercase border rounded-lg bg-gray-100 border-gray-300 md:rounded-[4px] shadow-sm h-9 w-full">
+              <h2 className="flex w-full mb-2 items-center justify-between px-2 font-semibold text-lg uppercase border rounded-lg bg-gray-100 border-gray-300 md:rounded-[4px] shadow-sm h-9 ">
                 Instructors
                 {showInstructor ? (
                   <UpArrow
@@ -75,7 +75,7 @@ export default function ManageUsers({ render, setRender }) {
 
           {userData.some((user) => user.role === "enduser") && (
             <>
-              <h2 className="flex items-center justify-between px-2 font-semibold text-lg uppercase border rounded-lg bg-gray-100 border-gray-300 md:rounded-[4px] shadow-sm h-9">
+              <h2 className="flex w-full mb-2 items-center justify-between px-2 font-semibold text-lg uppercase border rounded-lg bg-gray-100 border-gray-300 md:rounded-[4px] shadow-sm h-9">
                 EndUsers
                 {showEndUser ? (
                   <UpArrow
