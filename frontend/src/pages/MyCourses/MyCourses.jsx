@@ -4,6 +4,7 @@ import MyCoursesCourseCard from "./MyCoursesCourseCard/MyCoursesCourseCard";
 import UpArrow from "../../utils/icons/UpArrow";
 import DownArrow from "../../utils/icons/DownArrow";
 import { createCourse } from "../../services/courseServices";
+import axios from "axios";
 
 export default function MyCourses({ courseData, userData, setRender }) {
   const { currentUser } = useSelector((state) => state.user);
@@ -77,18 +78,31 @@ export default function MyCourses({ courseData, userData, setRender }) {
       instructor: currentUser._id,
       tags: tagList,
     };
+    const token = localStorage.getItem("token");
+    const headers = {
+      "Content-Type": "application/json",
+      Authorization: `Bearer ${token}`,
+    };
     try {
-      await createCourse(data);
+      await axios.post(
+        "https://edu-stream-backend-delta.vercel.app/course/create_course",
+        data,
+        {
+          method: "POST",
+          headers: headers,
+        }
+      );
       setRender((prevRender) => !prevRender);
-      setCourseName("");
-      setCourseDescription("");
-      setTags("");
-      setTagList([]);
       setShowAddCourse(false)
     } catch (error) {
       console.log(error);
     }
+    setCourseName("");
+    setCourseDescription("");
+    setTags("");
+    setTagList([]);
   };
+
 
   return (
     <div className="flex-1 m-2 sm:m-4">
@@ -188,7 +202,7 @@ export default function MyCourses({ courseData, userData, setRender }) {
       )}
       {!showAddCourse && (
         <>
-          {completedCourses?.length && (
+          {completedCourses?.length > 0 && (
             <>
               <h2
                 onClick={() => setShowCompletedCourses(!showCompletedCourses)}
@@ -220,7 +234,7 @@ export default function MyCourses({ courseData, userData, setRender }) {
           )}
 
           {currentUser.role === "instructor" &&
-            pendingCoursesInstructor?.length && (
+            pendingCoursesInstructor?.length > 0 && (
               <>
                 <h2
                   onClick={() => setShowPendingCourses(!showPendingCourses)}
@@ -255,7 +269,7 @@ export default function MyCourses({ courseData, userData, setRender }) {
             )}
 
           {currentUser.role === "instructor"
-            ? ownedCourses?.length && (
+            ? ownedCourses?.length > 0 && (
                 <>
                   <h2
                     onClick={() =>

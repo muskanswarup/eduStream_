@@ -6,6 +6,7 @@ import DownArrow from "../../utils/icons/DownArrow";
 import EditIcon from "../../utils/icons/EditIcon";
 import SingleTickIcon from "../../utils/icons/SingleTickIcon";
 import { editUser } from "../../services/userServices";
+import axios from "axios";
 
 export default function Profile({ userData, setRender, render }) {
   const { currentUser } = useSelector((state) => state.user);
@@ -22,9 +23,19 @@ export default function Profile({ userData, setRender, render }) {
 
   const handleClick = async () => {
     if (editAboutMe === true) {
+      const token = localStorage.getItem("token");
+      const headers = {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${token}`,
+      };
       try {
-        const res = editUser(currentUser._id, aboutMe);
-        setAboutMe(res.aboutme);
+        const res = await axios.put(
+          `https://edu-stream-backend-delta.vercel.app/user/edit_user/${currentUser._id}`,
+          { aboutme: aboutMe },
+          { headers: headers }
+        );
+        
+        setAboutMe(res.data.aboutme);
         setEditAboutMe(false);
         setRender(!render);
       } catch (error) {

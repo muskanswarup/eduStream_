@@ -1,30 +1,86 @@
 import { useParams } from "react-router-dom";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import TickIcon from "../../utils/icons/TickIcon";
 import CourseCourseCard from "./CourseCourseCard/CourseCourseCard";
 import { completeCourse, enrollCourse } from "../../services/courseServices";
 import useAddContentForm from "../../hooks/useAddContentForm";
+import axios from "axios";
+import { useState } from "react";
 
 export default function Course({ courseData, userData, setRender }) {
   const params = useParams();
   const courseId = params.id;
+  const [showAddContent, setShowAddContent] = useState(false);
 
   const { currentUser } = useSelector((state) => state.user);
 
-  const {
-    contentTitle,
-    contentURL,
-    showAddContent,
-    handleContentTitleChange,
-    handleContentURLChange,
-    handleToggleAddContent,
-    handleSubmit,
-  } = useAddContentForm(courseId, setRender);
+  const [contentTitle, setContentTitle] = useState("");
+  const [contentURL, setContentURL] = useState("");
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+
+    let embedUrl = null;
+
+    if (
+      contentURL.match(
+        /(?:https?:\/\/)?(?:www\.)?youtube\.com\/watch\?v=([a-zA-Z0-9_-]+)/
+      )
+    ) {
+      const videoId = contentURL.match(
+        /(?:https?:\/\/)?(?:www\.)?youtube\.com\/watch\?v=([a-zA-Z0-9_-]+)/
+      )[1];
+      embedUrl = `https://www.youtube.com/embed/${videoId}`;
+    } else {
+      console.log("invalid url");
+      return;
+    }
+
+    const data = {
+      title: contentTitle,
+      url: embedUrl,
+    };
+    const token = localStorage.getItem("token");
+    const headers = {
+      "Content-Type": "application/json",
+      Authorization: `Bearer ${token}`,
+    };
+    try {
+      const res = await axios.post(
+        `https://edu-stream-backend-delta.vercel.app/content/add_content/${courseId}`,
+        data,
+        {
+          method: "POST",
+          headers: headers,
+        }
+      );
+      console.log(res.data);
+      setShowAddContent(false)
+      setRender((prevRender) => !prevRender);
+    } catch (error) {
+      console.log(error);
+    }
+    setContentTitle("");
+    setContentURL("");
+  };
 
   const handleEnrollCourse = async () => {
     try {
-      await enrollCourse(courseId);
+      const token = localStorage.getItem("token");
+      const headers = {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${token}`,
+      };
+      await axios.put(
+        `https://edu-stream-backend-delta.vercel.app/course/enroll_course/${courseId}`,
+        {},
+        {
+          method: "PUT",
+          headers: headers,
+        }
+      );
       setRender((prevRender) => !prevRender);
+
     } catch (error) {
       console.log(error);
     }
@@ -32,8 +88,21 @@ export default function Course({ courseData, userData, setRender }) {
 
   const handleCompleteCourse = async () => {
     try {
-      await completeCourse(courseId);
+      const token = localStorage.getItem("token");
+      const headers = {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${token}`,
+      };
+      await axios.put(
+        `https://edu-stream-backend-delta.vercel.app/course/complete_course/${courseId}`,
+        {},
+        {
+          method: "PUT",
+          headers: headers,
+        }
+      );
       setRender((prevRender) => !prevRender);
+
     } catch (error) {
       console.log(error);
     }
@@ -44,57 +113,57 @@ export default function Course({ courseData, userData, setRender }) {
       {currentUser._id ===
         courseData?.find((course) => course._id === courseId)?.instructor
           ?._id && (
-        <>
-          <button
-            onClick={handleToggleAddContent}
-            className="border hover:bg-purple-700 rounded-lg hover:text-white font-semibold bg-gray-100 border-gray-300 md:rounded-[4px] text-sm px-3 shadow-sm h-9"
-          >
-            {showAddContent ? "Hide Add Content" : "Show Add Content"}
-          </button>
-          {showAddContent && (
-            <div className="flex justify-center mt-4">
-              <form
-                className="p-4 flex flex-col gap-2 w-96 border bg-gray-100 rounded-lg border-gray-300"
-                onSubmit={handleSubmit}
-              >
-                <div className="flex flex-col gap-1">
-                  <h1 className="font-semibold">Content Title</h1>
-                  <div className="border bg-gray-100 border-gray-300 md:rounded-[4px] lg:flex items-center gap-2 text-sm px-3 py-1 shadow-sm h-9">
-                    <input
-                      type="text"
-                      id="contentTitle"
-                      value={contentTitle}
-                      onChange={handleContentTitleChange}
-                      required
-                      placeholder="Course Name"
-                      className="bg-gray-100 focus:outline-none"
-                    />
-                  </div>
-                </div>
-                <div className="flex flex-col gap-1">
-                  <h1 className="font-semibold">Content URL</h1>
-                  <div className="border bg-gray-100 border-gray-300 md:rounded-[4px] lg:flex items-center gap-2 text-sm px-3 py-1 shadow-sm h-9">
-                    <input
-                      type="text"
-                      id="contentURL"
-                      value={contentURL}
-                      onChange={handleContentURLChange}
-                      required
-                      placeholder="Course Description"
-                      className="bg-gray-100 focus:outline-none"
-                    />
-                  </div>
-                </div>
-                <button
-                  className="border hover:bg-purple-700 rounded-lg hover:text-white font-semibold bg-gray-100 border-gray-300 md:rounded-[4px] text-sm px-3 shadow-sm h-9"
-                  type="submit"
+            <>
+            <button
+              onClick={() => setShowAddContent(!showAddContent)}
+              className="border hover:bg-purple-700 rounded-lg hover:text-white font-semibold bg-gray-100 border-gray-300 md:rounded-[4px] text-sm px-3 shadow-sm h-9"
+            >
+              {showAddContent ? "Hide Add Content" : "Show Add Content"}
+            </button>
+            {showAddContent && (
+              <div className="flex justify-center mt-4">
+                <form
+                  className="p-4 flex flex-col gap-2  w-96 border bg-gray-100 rounded-lg border-gray-300"
+                  onSubmit={handleSubmit}
                 >
-                  Submit
-                </button>
-              </form>
-            </div>
-          )}
-        </>
+                  <div className="flex flex-col gap-1">
+                    <h1 className="font-semibold ">Content Title</h1>
+                    <div className="border bg-gray-100 border-gray-300 md:rounded-[4px] lg:flex items-center gap-2 text-sm px-3 py-1 shadow-sm h-9 hidden ">
+                      <input
+                        type="text"
+                        id="contentTitle"
+                        value={contentTitle}
+                        onChange={(e) => setContentTitle(e.target.value)}
+                        required
+                        placeholder="Course Name"
+                        className="bg-gray-100 focus:outline-none hidden md:block"
+                      ></input>
+                    </div>
+                  </div>
+                  <div className="flex flex-col gap-1">
+                    <h1 className="font-semibold ">Content URL</h1>
+                    <div className="border bg-gray-100 border-gray-300 md:rounded-[4px] lg:flex items-center gap-2 text-sm px-3 py-1 shadow-sm h-9 hidden ">
+                      <input
+                        type="text"
+                        id="contentURL"
+                        value={contentURL}
+                        onChange={(e) => setContentURL(e.target.value)}
+                        required
+                        placeholder="Course Description"
+                        className="bg-gray-100 focus:outline-none hidden md:block"
+                      ></input>
+                    </div>
+                  </div>
+                  <button
+                    className="border hover:bg-purple-700 rounded-lg hover:text-white font-semibold bg-gray-100 border-gray-300 md:rounded-[4px] text-sm px-3 shadow-sm h-9"
+                    type="submit"
+                  >
+                    Submit
+                  </button>
+                </form>
+              </div>
+            )}
+          </>
       )}
       {!showAddContent && (
         <>

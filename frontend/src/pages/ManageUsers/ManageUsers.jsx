@@ -4,6 +4,7 @@ import { useSelector } from "react-redux";
 import UpArrow from "../../utils/icons/UpArrow";
 import DownArrow from "../../utils/icons/DownArrow";
 import { getAllUsers } from "../../services/userServices";
+import axios from "axios";
 
 export default function ManageUsers({ render, setRender }) {
   const { currentUser } = useSelector((state) => state.user);
@@ -15,8 +16,18 @@ export default function ManageUsers({ render, setRender }) {
   useEffect(() => {
     const fetchUserData = async () => {
       try {
-        const res = await getAllUsers()
-        setUserData(res);
+        const token = localStorage.getItem("token");
+        const headers = {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${token}`,
+        };
+        const res = await axios.get(
+          "https://edu-stream-backend-delta.vercel.app/user/get_all_users",
+          {
+            headers: headers,
+          }
+        );
+        setUserData(res.data);
       } catch (error) {
         console.log(error);
       }

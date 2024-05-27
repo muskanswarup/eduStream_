@@ -2,6 +2,7 @@ import { useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import DeleteIcon from "../../../utils/icons/DeleteIcon";
 import { deleteCourse } from "../../../services/courseServices";
+import axios from "axios";
 
 export default function ManageCoursesCourseCard({ course, render, setRender }) {
   const navigate = useNavigate();
@@ -18,8 +19,19 @@ export default function ManageCoursesCourseCard({ course, render, setRender }) {
   };
 
   const handleDeleteCourse = async () => {
+    const token = localStorage.getItem("token");
+    const headers = {
+      "Content-Type": "application/json",
+      Authorization: `Bearer ${token}`,
+    };
     try {
-      await deleteCourse(course._id);
+      await axios.delete(
+        `https://edu-stream-backend-delta.vercel.app/course/delete_course/${course._id}`,
+        {
+          method: "DELETE",
+          headers: headers,
+        }
+      );
       setRender(!render);
     } catch (error) {
       console.log(error);

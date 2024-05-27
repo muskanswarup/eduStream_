@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import CategoriesCourseCard from "./CategoriesCourseCard/CategoriesCourseCard";
 import { getTags } from "../../services/tagServices";
+import axios from "axios";
 
 export default function Categories({ courseData, userData }) {
   const [tagsData, setTagsData] = useState([]);
@@ -9,7 +10,17 @@ export default function Categories({ courseData, userData }) {
   useEffect(() => {
     const fetchTags = async () => {
       try {
-        const data = await getTags();
+        const token = localStorage.getItem("token");
+        const headers = {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${token}`,
+        };
+        const res = await axios.get("https://edu-stream-backend-delta.vercel.app/tag/get_tags", {
+          method: "GET",
+          headers: headers,
+        });
+        const data = res.data;
+
         setTagsData(data);
       } catch (error) {
         console.log(error);
@@ -28,7 +39,7 @@ export default function Categories({ courseData, userData }) {
   };
 
   return (
-    <div className="m-2 sm:m-4 flex flex-col gap-2">
+    <div className="flex-1 m-2 sm:m-4 flex flex-col gap-2">
       <h2 className="flex items-center justify-between px-2 font-semibold text-lg uppercase border rounded-lg bg-gray-100 border-gray-300 md:rounded-[4px] shadow-sm h-9">Categories</h2>
       <div className="flex flex-wrap">
         {tagsData ? (

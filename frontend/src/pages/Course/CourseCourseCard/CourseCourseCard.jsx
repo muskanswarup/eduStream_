@@ -6,6 +6,7 @@ import {
   deleteContent,
   markContentAsWatched,
 } from "../../../services/contentServices";
+import axios from "axios";
 
 export default function CourseCourseCard({
   content,
@@ -16,9 +17,17 @@ export default function CourseCourseCard({
   const { currentUser } = useSelector((state) => state.user);
 
   const handleDeleteContent = async (id) => {
+    const token = localStorage.getItem("token");
+    const headers = {
+      "Content-Type": "application/json",
+      Authorization: `Bearer ${token}`,
+    };
     try {
-      await deleteContent(id);
-      setRender((prevRender) => !prevRender);
+      await axios.delete(`https://edu-stream-backend-delta.vercel.app/content/delete_content/${id}`, {
+        method: "DELETE",
+        headers: headers,
+      });
+      setRender(!render);
     } catch (error) {
       console.log(error);
     }
@@ -26,7 +35,19 @@ export default function CourseCourseCard({
 
   const handleWatchedContent = async (id) => {
     try {
-      await markContentAsWatched(id);
+      const token = localStorage.getItem("token");
+      const headers = {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${token}`,
+      };
+      await axios.put(
+        `https://edu-stream-backend-delta.vercel.app/content/watched_content/${id}`,
+        {},
+        {
+          method: "PUT",
+          headers: headers,
+        }
+      );
       setRender((prevRender) => !prevRender);
     } catch (error) {
       console.log(error);
