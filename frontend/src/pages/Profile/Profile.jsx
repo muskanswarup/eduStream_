@@ -34,7 +34,6 @@ export default function Profile({ userData, setRender, render }) {
           { headers: headers }
         );
 
-        setAboutMe(res.data.aboutme);
         setEditAboutMe(false);
         setRender(!render);
       } catch (error) {
