@@ -67,6 +67,7 @@ const createCourse = async (req, res, next) => {
       title: req.body.title,
       description: req.body.description,
       instructor: req.user.id,
+      avatar: "course.jpg",
       enrolled_users: [],
       course_content: [],
       tags: tagModels || [],

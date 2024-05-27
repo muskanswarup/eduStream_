@@ -24,6 +24,10 @@ const courseSchema = new mongoose.Schema({
     },
   ],
 
+  avatar: {
+    type: String,
+  },
+
   course_content: [
     {
       type: mongoose.Schema.Types.ObjectId,
@@ -33,14 +37,14 @@ const courseSchema = new mongoose.Schema({
 
   tags: [
     {
-        type: mongoose.Schema.Types.ObjectId,
-        ref: "Tag"
-    }
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "Tag",
+    },
   ],
 
   completion: {
     type: Boolean,
-  }
+  },
 });
 
 const courseModel = mongoose.model("Course", courseSchema);

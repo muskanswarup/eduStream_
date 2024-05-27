@@ -69,7 +69,7 @@ export default function Sidebar() {
         onClick={() => setIsModalOpen(!isModalOpen)}
       >
         <img
-          src="/cutepfp.jpg"
+          src={`/${currentUser?.avatar}`}
           alt=""
           className="h-14 w-14 border rounded-full lg:hidden"
         />

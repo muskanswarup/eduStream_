@@ -112,7 +112,7 @@ export default function MyCourses({ courseData, userData, setRender }) {
             onClick={() => setShowAddCourse(!showAddCourse)}
             className="border hover:bg-purple-700 rounded-lg hover:text-white font-semibold bg-gray-100 border-gray-300 md:rounded-[4px] text-sm px-3 shadow-sm h-9 w-full mb-2"
           >
-            {showAddCourse ? "Hide Add Course" : "Show Add Course"}
+            {showAddCourse ? "Go Back" : "Create Course"}
           </button>
           {showAddCourse && (
             <div className="flex justify-center mt-4">
@@ -226,6 +226,7 @@ export default function MyCourses({ courseData, userData, setRender }) {
                       title={course?.title}
                       description={course?.description}
                       instructorName={course?.instructor.name}
+                      avatar={course.avatar}
                     />
                   ))}
                 </div>
@@ -261,6 +262,7 @@ export default function MyCourses({ courseData, userData, setRender }) {
                         title={course?.title}
                         description={course?.description}
                         instructorName={course?.instructor.name}
+                        avatar={course.avatar}
                       />
                     ))}
                   </div>
@@ -295,6 +297,7 @@ export default function MyCourses({ courseData, userData, setRender }) {
                           title={course?.title}
                           description={course?.description}
                           instructorName={course?.instructor.name}
+                          avatar={course.avatar}
                         />
                       ))}
                     </div>
@@ -327,6 +330,7 @@ export default function MyCourses({ courseData, userData, setRender }) {
                           title={course?.title}
                           description={course?.description}
                           instructorName={course?.instructor.name}
+                          avatar={course.avatar}
                         />
                       ))}
                     </div>

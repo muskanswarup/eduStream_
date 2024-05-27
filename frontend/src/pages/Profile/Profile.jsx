@@ -50,7 +50,7 @@ export default function Profile({ userData, setRender, render }) {
     <div className="flex-1 flex flex-col items-center m-2 sm:m-4">
       <div className="flex flex-col gap-2">
         <img
-          src="/cutepfp.jpg"
+          src={`/${currentUser.avatar}`}
           className="object-cover rounded-full h-40 w-40 self-center"
         />
         <div className="flex flex-col gap-1">

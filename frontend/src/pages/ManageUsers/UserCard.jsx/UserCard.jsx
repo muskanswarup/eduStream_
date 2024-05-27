@@ -26,7 +26,7 @@ export default function UserCard({ user, render, setRender }) {
   return (
     <div key={user._id} className="cursor-pointer flex flex-col sm:m-4 gap-2 ">
       <img
-        src="/cutepfp.jpg"
+        src={`/${user.avatar}`}
         alt="course-display"
         className="object-cover rounded-md hover:opacity-90 h-full w-full"
       />

@@ -55,7 +55,7 @@ export default function Course({ courseData, userData, setRender }) {
         }
       );
       console.log(res.data);
-      setShowAddContent(false)
+      setShowAddContent(false);
       setRender((prevRender) => !prevRender);
     } catch (error) {
       console.log(error);
@@ -80,7 +80,6 @@ export default function Course({ courseData, userData, setRender }) {
         }
       );
       setRender((prevRender) => !prevRender);
-
     } catch (error) {
       console.log(error);
     }
@@ -102,7 +101,6 @@ export default function Course({ courseData, userData, setRender }) {
         }
       );
       setRender((prevRender) => !prevRender);
-
     } catch (error) {
       console.log(error);
     }
@@ -113,62 +111,68 @@ export default function Course({ courseData, userData, setRender }) {
       {currentUser._id ===
         courseData?.find((course) => course._id === courseId)?.instructor
           ?._id && (
-            <>
+        <>
+          {!userData.completed_courses.find(
+            (course) => course._id === courseId
+          ) && (
             <button
               onClick={() => setShowAddContent(!showAddContent)}
               className="border hover:bg-purple-700 rounded-lg hover:text-white font-semibold bg-gray-100 border-gray-300 md:rounded-[4px] text-sm px-3 shadow-sm h-9"
             >
-              {showAddContent ? "Hide Add Content" : "Show Add Content"}
+              {showAddContent ? "Go Back" : "Add Content"}
             </button>
-            {showAddContent && (
-              <div className="flex justify-center mt-4">
-                <form
-                  className="p-4 flex flex-col gap-2  w-96 border bg-gray-100 rounded-lg border-gray-300"
-                  onSubmit={handleSubmit}
+          )}
+          {showAddContent && (
+            <div className="flex justify-center mt-4">
+              <form
+                className="p-4 flex flex-col gap-2  w-96 border bg-gray-100 rounded-lg border-gray-300"
+                onSubmit={handleSubmit}
+              >
+                <div className="flex flex-col gap-1">
+                  <h1 className="font-semibold ">Content Title</h1>
+                  <div className="border bg-gray-100 border-gray-300 md:rounded-[4px] lg:flex items-center gap-2 text-sm px-3 py-1 shadow-sm h-9 hidden ">
+                    <input
+                      type="text"
+                      id="contentTitle"
+                      value={contentTitle}
+                      onChange={(e) => setContentTitle(e.target.value)}
+                      required
+                      placeholder="Course Name"
+                      className="bg-gray-100 focus:outline-none hidden md:block"
+                    ></input>
+                  </div>
+                </div>
+                <div className="flex flex-col gap-1">
+                  <h1 className="font-semibold ">Content URL</h1>
+                  <div className="border bg-gray-100 border-gray-300 md:rounded-[4px] lg:flex items-center gap-2 text-sm px-3 py-1 shadow-sm h-9 hidden ">
+                    <input
+                      type="text"
+                      id="contentURL"
+                      value={contentURL}
+                      onChange={(e) => setContentURL(e.target.value)}
+                      required
+                      placeholder="Course Description"
+                      className="bg-gray-100 focus:outline-none hidden md:block"
+                    ></input>
+                  </div>
+                </div>
+                <button
+                  className="border hover:bg-purple-700 rounded-lg hover:text-white font-semibold bg-gray-100 border-gray-300 md:rounded-[4px] text-sm px-3 shadow-sm h-9"
+                  type="submit"
                 >
-                  <div className="flex flex-col gap-1">
-                    <h1 className="font-semibold ">Content Title</h1>
-                    <div className="border bg-gray-100 border-gray-300 md:rounded-[4px] lg:flex items-center gap-2 text-sm px-3 py-1 shadow-sm h-9 hidden ">
-                      <input
-                        type="text"
-                        id="contentTitle"
-                        value={contentTitle}
-                        onChange={(e) => setContentTitle(e.target.value)}
-                        required
-                        placeholder="Course Name"
-                        className="bg-gray-100 focus:outline-none hidden md:block"
-                      ></input>
-                    </div>
-                  </div>
-                  <div className="flex flex-col gap-1">
-                    <h1 className="font-semibold ">Content URL</h1>
-                    <div className="border bg-gray-100 border-gray-300 md:rounded-[4px] lg:flex items-center gap-2 text-sm px-3 py-1 shadow-sm h-9 hidden ">
-                      <input
-                        type="text"
-                        id="contentURL"
-                        value={contentURL}
-                        onChange={(e) => setContentURL(e.target.value)}
-                        required
-                        placeholder="Course Description"
-                        className="bg-gray-100 focus:outline-none hidden md:block"
-                      ></input>
-                    </div>
-                  </div>
-                  <button
-                    className="border hover:bg-purple-700 rounded-lg hover:text-white font-semibold bg-gray-100 border-gray-300 md:rounded-[4px] text-sm px-3 shadow-sm h-9"
-                    type="submit"
-                  >
-                    Submit
-                  </button>
-                </form>
-              </div>
-            )}
-          </>
+                  Submit
+                </button>
+              </form>
+            </div>
+          )}
+        </>
       )}
       {!showAddContent && (
         <>
           <div className=" flex justify-between items-center gap-2">
-            <h2 className="flex-1 flex items-center justify-between px-2 font-semibold text-lg uppercase border rounded-lg bg-gray-100 border-gray-300 md:rounded-[4px] shadow-sm h-9">Course Content</h2>
+            <h2 className="flex-1 flex items-center justify-between px-2 font-semibold text-lg uppercase border rounded-lg bg-gray-100 border-gray-300 md:rounded-[4px] shadow-sm h-9">
+              Course Content
+            </h2>
             {currentUser.role === "enduser" &&
               !userData?.enrolled_courses?.some(
                 (course) => course._id === courseId

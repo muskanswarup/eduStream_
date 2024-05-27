@@ -1,7 +1,7 @@
 import { useNavigate } from "react-router-dom";
 import { useSelector } from "react-redux";
 
-export default function MyCoursesCourseCard({ id, title, description, instructorName }) {
+export default function MyCoursesCourseCard({ id, title, description, instructorName, avatar }) {
   const navigate = useNavigate();
 
   const { currentUser } = useSelector((state) => state.user);
@@ -17,7 +17,7 @@ export default function MyCoursesCourseCard({ id, title, description, instructor
       className="cursor-pointer flex flex-col sm:m-4 gap-2 "
     >
       <img
-        src="/cutepfp.jpg"
+        src={`/${avatar}`}
         alt="course-display"
         className="object-cover rounded-md hover:opacity-90 h-full w-full"
       />

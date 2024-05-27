@@ -54,7 +54,7 @@ export default function CategoriesCourseCard({ userData, course }) {
       className="cursor-pointer flex flex-col sm:m-4 gap-2 "
     >
       <img
-        src="/cutepfp.jpg"
+        src={`/${course.avatar}`}
         alt="course-display"
         className="object-cover rounded-md hover:opacity-90 h-full w-full"
       />
