@@ -68,7 +68,7 @@ export default function Profile({ userData, setRender, render }) {
             <p className={`flex items-center justify-center text-sm border ${!editAboutMe && `p-2`} rounded-md mb-2`}>
               {editAboutMe ? <input className="p-2 rounded-md" onChange={(e) => setAboutMe(e.target.value)}/> : aboutMe
                 ? aboutMe
-                : "Edit Your AboutMe"}
+                : currentUser.aboutme ? currentUser.aboutme : "Edit Your AboutMe"}
             </p>
             {editAboutMe ? (
               <SingleTickIcon
