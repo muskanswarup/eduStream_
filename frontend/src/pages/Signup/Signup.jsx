@@ -1,51 +1,25 @@
-import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import axios from "axios";
-import {
-  signInFailure,
-  signInStart,
-  signInSuccess,
-} from "../../redux/user/userSlice";
-import { useDispatch } from "react-redux";
+import useSignupForm from "../../hooks/useSignupForm";
 
 export default function Signup() {
-  const navigate = useNavigate();
-  const dispatch = useDispatch();
-  const [email, setEmail] = useState("");
-  const [name, setName] = useState("");
-  const [password, setPassword] = useState("");
-  const [role, setRole] = useState("");
-
-  const handleSubmit = async (e) => {
-    e.preventDefault();
-    dispatch(signInStart());
-    try {
-      const res = await axios.post(
-        "https://edu-stream-backend-delta.vercel.app/api/signup",
-        { name, email, password, role },
-        {
-          headers: {
-            "Content-Type": "application/json",
-          },
-        }
-      );
-      const data = res.data;
-      if (data.success === false) {
-        dispatch(signInFailure(data.message));
-        return;
-      }
-      dispatch(signInSuccess(data));
-      navigate("/login");
-    } catch (error) {
-      dispatch(signInFailure(error.message));
-    }
-  };
+  const navigate = useNavigate()
+  const {
+    email,
+    name,
+    password,
+    role,
+    handleEmailChange,
+    handleNameChange,
+    handlePasswordChange,
+    handleRoleChange,
+    handleSubmit,
+  } = useSignupForm();
 
   return (
     <div className="flex-1 flex items-center justify-center">
       <form
         onSubmit={handleSubmit}
-        className="p-4 flex flex-col gap-2  w-96 border bg-gray-100 rounded-lg border-gray-300"
+        className="p-4 flex flex-col gap-2 w-96 border bg-gray-100 rounded-lg border-gray-300"
       >
         <h2 className="text-2xl font-bold mb-4">Signup</h2>
         <div className="mb-4">
@@ -59,7 +33,7 @@ export default function Signup() {
             type="text"
             id="name"
             value={name}
-            onChange={(e) => setName(e.target.value)}
+            onChange={handleNameChange}
             className="w-full px-4 py-2 border rounded-md focus:outline-none focus:border-blue-500"
             required
           />
@@ -75,7 +49,7 @@ export default function Signup() {
             type="email"
             id="email"
             value={email}
-            onChange={(e) => setEmail(e.target.value)}
+            onChange={handleEmailChange}
             className="w-full px-4 py-2 border rounded-md focus:outline-none focus:border-blue-500"
             required
           />
@@ -91,7 +65,7 @@ export default function Signup() {
             type="password"
             id="password"
             value={password}
-            onChange={(e) => setPassword(e.target.value)}
+            onChange={handlePasswordChange}
             className="w-full px-4 py-2 border rounded-md focus:outline-none focus:border-blue-500"
             required
           />
@@ -106,7 +80,7 @@ export default function Signup() {
           <select
             id="role"
             value={role}
-            onChange={(e) => setRole(e.target.value)}
+            onChange={handleRoleChange}
             className="w-full px-4 py-2 border rounded-md focus:outline-none focus:border-blue-500"
           >
             <option value="enduser">Enduser</option>

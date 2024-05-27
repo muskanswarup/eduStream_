@@ -2,29 +2,23 @@ import { useSelector } from "react-redux";
 import DeleteIcon from "../../../utils/icons/DeleteIcon";
 import EyeIcon from "../../../utils/icons/WatchedIcon";
 import TickIcon from "../../../utils/icons/TickIcon";
-import axios from "axios";
+import {
+  deleteContent,
+  markContentAsWatched,
+} from "../../../services/contentServices";
 
-export default function ContentCard({
+export default function CourseCourseCard({
   content,
   setRender,
-  render,
   courseData,
   courseId,
 }) {
   const { currentUser } = useSelector((state) => state.user);
 
   const handleDeleteContent = async (id) => {
-    const token = localStorage.getItem("token");
-    const headers = {
-      "Content-Type": "application/json",
-      Authorization: `Bearer ${token}`,
-    };
     try {
-      await axios.delete(`https://edu-stream-backend-delta.vercel.app/content/delete_content/${id}`, {
-        method: "DELETE",
-        headers: headers,
-      });
-      setRender(!render);
+      await deleteContent(id);
+      setRender((prevRender) => !prevRender);
     } catch (error) {
       console.log(error);
     }
@@ -32,26 +26,17 @@ export default function ContentCard({
 
   const handleWatchedContent = async (id) => {
     try {
-      const token = localStorage.getItem("token");
-      const headers = {
-        "Content-Type": "application/json",
-        Authorization: `Bearer ${token}`,
-      };
-      await axios.put(
-        `https://edu-stream-backend-delta.vercel.app/content/watched_content/${id}`,
-        {},
-        {
-          method: "PUT",
-          headers: headers,
-        }
-      );
-      setRender(!render);
+      await markContentAsWatched(id);
+      setRender((prevRender) => !prevRender);
     } catch (error) {
       console.log(error);
     }
   };
   return (
-    <div key={content._id} className="cursor-pointer flex flex-col sm:m-4 gap-1 ">
+    <div
+      key={content._id}
+      className="cursor-pointer flex flex-col sm:m-4 gap-1 "
+    >
       <iframe
         className="object-cover rounded-md hover:opacity-90 h-60 w-full"
         title={content.title}

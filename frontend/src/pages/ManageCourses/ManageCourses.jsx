@@ -1,5 +1,5 @@
 import React from "react";
-import CourseCard from "./CourseCard/CouseCard";
+import ManageCoursesCourseCard from "./ManageCoursesCourseCard/ManageCoursesCourseCard";
 
 export default function ManageCourses({
   courseData,
@@ -12,7 +12,7 @@ export default function ManageCourses({
       <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 xl:grid-cols-4 2xl:grid-cols-5 gap-4 items-start">
         {courseData.length > 0 &&
           courseData.map((course) => (
-            <CourseCard
+            <ManageCoursesCourseCard
               key={course._id}
               course={course}
               render={render}

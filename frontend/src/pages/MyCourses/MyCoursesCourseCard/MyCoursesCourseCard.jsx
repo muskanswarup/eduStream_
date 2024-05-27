@@ -1,7 +1,7 @@
 import { useNavigate } from "react-router-dom";
 import { useSelector } from "react-redux";
 
-export default function CourseCard({ id, title, description, instructorName }) {
+export default function MyCoursesCourseCard({ id, title, description, instructorName }) {
   const navigate = useNavigate();
 
   const { currentUser } = useSelector((state) => state.user);

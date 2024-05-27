@@ -1,21 +1,13 @@
 import { useSelector } from "react-redux";
-import axios from "axios";
 import DeleteIcon from "../../../utils/icons/DeleteIcon";
+import { deleteUser } from "../../../services/userServices";
 
 export default function UserCard({ user, render, setRender }) {
   const { currentUser } = useSelector((state) => state.user);
 
   const handleUserDelete = async () => {
-    const token = localStorage.getItem("token");
-    const headers = {
-      "Content-Type": "application/json",
-      Authorization: `Bearer ${token}`,
-    };
     try {
-      await axios.delete(`https://edu-stream-backend-delta.vercel.app/user/delete_user/${user._id}`, {
-        method: "DELETE",
-        headers: headers,
-      });
+      await deleteUser(user._id)
       setRender(!render);
     } catch (error) {
       console.log(error);

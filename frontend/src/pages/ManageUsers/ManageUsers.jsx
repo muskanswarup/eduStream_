@@ -1,9 +1,9 @@
 import React, { useEffect, useState } from "react";
 import UserCard from "./UserCard.jsx/UserCard";
-import axios from "axios";
 import { useSelector } from "react-redux";
 import UpArrow from "../../utils/icons/UpArrow";
 import DownArrow from "../../utils/icons/DownArrow";
+import { getAllUsers } from "../../services/userServices";
 
 export default function ManageUsers({ render, setRender }) {
   const { currentUser } = useSelector((state) => state.user);
@@ -15,18 +15,8 @@ export default function ManageUsers({ render, setRender }) {
   useEffect(() => {
     const fetchUserData = async () => {
       try {
-        const token = localStorage.getItem("token");
-        const headers = {
-          "Content-Type": "application/json",
-          Authorization: `Bearer ${token}`,
-        };
-        const res = await axios.get(
-          "https://edu-stream-backend-delta.vercel.app/user/get_all_users",
-          {
-            headers: headers,
-          }
-        );
-        setUserData(res.data);
+        const res = await getAllUsers()
+        setUserData(res);
       } catch (error) {
         console.log(error);
       }
@@ -35,7 +25,7 @@ export default function ManageUsers({ render, setRender }) {
   }, [render]);
   return (
     <div className="flex-1 m-2 sm:m-4 gap-2">
-      {userData.length > 0 ? (
+      {userData?.length > 0 ? (
         <>
           {userData.some((user) => user.role === "instructor") && (
             <>

@@ -1,11 +1,11 @@
-import axios from "axios";
 import React, { useEffect, useState } from "react";
 import { useSelector } from "react-redux";
-import CourseCard from "./CourseCard/CourseCard";
+import MyCoursesCourseCard from "./MyCoursesCourseCard/MyCoursesCourseCard";
 import UpArrow from "../../utils/icons/UpArrow";
 import DownArrow from "../../utils/icons/DownArrow";
+import { createCourse } from "../../services/courseServices";
 
-export default function MyCourses({ courseData, userData, setRender, render }) {
+export default function MyCourses({ courseData, userData, setRender }) {
   const { currentUser } = useSelector((state) => state.user);
 
   const [showAddCourse, setShowAddCourse] = useState(false);
@@ -46,13 +46,6 @@ export default function MyCourses({ courseData, userData, setRender, render }) {
     }
   }, [userData, courseData]);
 
-  const pendingCoursesEnduser = enrolledCourses
-    ? enrolledCourses.filter((enrolledCourse) => {
-        return !userData.completed_courses.some(
-          (completedCourse) => completedCourse._id === enrolledCourse._id
-        );
-      })
-    : [];
   const pendingCoursesInstructor = ownedCourses
     ? ownedCourses.filter((ownedCourse) => {
         return !userData.completed_courses.some(
@@ -84,28 +77,17 @@ export default function MyCourses({ courseData, userData, setRender, render }) {
       instructor: currentUser._id,
       tags: tagList,
     };
-    const token = localStorage.getItem("token");
-    const headers = {
-      "Content-Type": "application/json",
-      Authorization: `Bearer ${token}`,
-    };
     try {
-      await axios.post(
-        "https://edu-stream-backend-delta.vercel.app/course/create_course",
-        data,
-        {
-          method: "POST",
-          headers: headers,
-        }
-      );
-      setRender(!render);
+      await createCourse(data);
+      setRender((prevRender) => !prevRender);
+      setCourseName("");
+      setCourseDescription("");
+      setTags("");
+      setTagList([]);
+      setShowAddCourse(false)
     } catch (error) {
       console.log(error);
     }
-    setCourseName("");
-    setCourseDescription("");
-    setTags("");
-    setTagList([]);
   };
 
   return (
@@ -206,7 +188,7 @@ export default function MyCourses({ courseData, userData, setRender, render }) {
       )}
       {!showAddCourse && (
         <>
-          {completedCourses?.length > 0 && (
+          {completedCourses?.length && (
             <>
               <h2
                 onClick={() => setShowCompletedCourses(!showCompletedCourses)}
@@ -224,13 +206,12 @@ export default function MyCourses({ courseData, userData, setRender, render }) {
               {showCompletedCourses && (
                 <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 xl:grid-cols-4 2xl:grid-cols-5 gap-4 items-start">
                   {completedCourses.map((course) => (
-                    <CourseCard
+                    <MyCoursesCourseCard
                       key={course?._id}
                       id={course?._id}
                       title={course?.title}
                       description={course?.description}
                       instructorName={course?.instructor.name}
-                      
                     />
                   ))}
                 </div>
@@ -238,75 +219,43 @@ export default function MyCourses({ courseData, userData, setRender, render }) {
             </>
           )}
 
-          {currentUser.role === "instructor"
-            ? pendingCoursesInstructor?.length > 0 && (
-                <>
-                  <h2
-                    onClick={() => setShowPendingCourses(!showPendingCourses)}
-                    className="group flex items-center justify-between px-2 font-semibold text-lg uppercase border rounded-lg bg-gray-100 border-gray-300 md:rounded-[4px] shadow-sm h-9 w-full mb-2 hover:bg-gray-50 hover:cursor-pointer"
-                  >
-                    <span className="group-hover:text-purple-700">
-                      Pending Courses
-                    </span>
-                    {showPendingCourses ? (
-                      <UpArrow className="hover:cursor-pointer group-hover:text-purple-700" />
-                    ) : (
-                      <DownArrow
-                        onClick={() => setShowPendingCourses(true)}
-                        className="hover:cursor-pointer group-hover:text-purple-700"
+          {currentUser.role === "instructor" &&
+            pendingCoursesInstructor?.length && (
+              <>
+                <h2
+                  onClick={() => setShowPendingCourses(!showPendingCourses)}
+                  className="group flex items-center justify-between px-2 font-semibold text-lg uppercase border rounded-lg bg-gray-100 border-gray-300 md:rounded-[4px] shadow-sm h-9 w-full mb-2 hover:bg-gray-50 hover:cursor-pointer"
+                >
+                  <span className="group-hover:text-purple-700">
+                    Pending Courses
+                  </span>
+                  {showPendingCourses ? (
+                    <UpArrow className="hover:cursor-pointer group-hover:text-purple-700" />
+                  ) : (
+                    <DownArrow
+                      onClick={() => setShowPendingCourses(true)}
+                      className="hover:cursor-pointer group-hover:text-purple-700"
+                    />
+                  )}
+                </h2>
+                {showPendingCourses && (
+                  <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 xl:grid-cols-4 2xl:grid-cols-5 gap-4 items-start">
+                    {pendingCoursesInstructor?.map((course) => (
+                      <MyCoursesCourseCard
+                        key={course?._id}
+                        id={course?._id}
+                        title={course?.title}
+                        description={course?.description}
+                        instructorName={course?.instructor.name}
                       />
-                    )}
-                  </h2>
-                  {showPendingCourses && (
-                    <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 xl:grid-cols-4 2xl:grid-cols-5 gap-4 items-start">
-                      {pendingCoursesInstructor?.map((course) => (
-                        <CourseCard
-                          key={course?._id}
-                          id={course?._id}
-                          title={course?.title}
-                          description={course?.description}
-                          instructorName={course?.instructor.name}
-                         
-                        />
-                      ))}
-                    </div>
-                  )}
-                </>
-              )
-            : pendingCoursesEnduser?.length > 0 && (
-                <>
-                  <h2
-                    onClick={() => setShowPendingCourses(!showPendingCourses)}
-                    className=" group flex items-center justify-between px-2 font-semibold text-lg uppercase border rounded-lg bg-gray-100 border-gray-300 md:rounded-[4px] shadow-sm h-9 w-full mb-2 hover:bg-gray-50 hover:cursor-pointer"
-                  >
-                    <span className="group-hover:text-purple-700">
-                      Pending Courses
-                    </span>
-                    {showPendingCourses ? (
-                      <UpArrow className="hover:cursor-pointer group-hover:text-purple-700" />
-                    ) : (
-                      <DownArrow className="hover:cursor-pointer group-hover:text-purple-700" />
-                    )}
-                  </h2>
-                  {showPendingCourses && (
-                    <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 xl:grid-cols-4 2xl:grid-cols-5 gap-4 items-start">
-                      {pendingCoursesEnduser?.map((course) => (
-                        <CourseCard
-                          key={course?._id}
-                          id={course?._id}
-                          title={course?.title}
-                          description={course?.description}
-                          instructorName={course?.instructor.name}
-                          
-                        />
-                      ))}
-                    </div>
-                  )}
-                </>
-              )}
+                    ))}
+                  </div>
+                )}
+              </>
+            )}
 
           {currentUser.role === "instructor"
-            ? ownedCourses?.length > 0 && (
+            ? ownedCourses?.length && (
                 <>
                   <h2
                     onClick={() =>
@@ -326,13 +275,12 @@ export default function MyCourses({ courseData, userData, setRender, render }) {
                   {showOwnedEnrolledCourses && (
                     <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 xl:grid-cols-4 2xl:grid-cols-5 gap-4 items-start">
                       {ownedCourses.map((course) => (
-                        <CourseCard
+                        <MyCoursesCourseCard
                           key={course?._id}
                           id={course?._id}
                           title={course?.title}
                           description={course?.description}
                           instructorName={course?.instructor.name}
-                          
                         />
                       ))}
                     </div>
@@ -359,13 +307,12 @@ export default function MyCourses({ courseData, userData, setRender, render }) {
                   {showOwnedEnrolledCourses && (
                     <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 xl:grid-cols-4 2xl:grid-cols-5 gap-4 items-start">
                       {enrolledCourses?.map((course) => (
-                        <CourseCard
+                        <MyCoursesCourseCard
                           key={course?._id}
                           id={course?._id}
                           title={course?.title}
                           description={course?.description}
                           instructorName={course?.instructor.name}
-                          
                         />
                       ))}
                     </div>
@@ -378,14 +325,13 @@ export default function MyCourses({ courseData, userData, setRender, render }) {
               pendingCoursesInstructor?.length === 0 &&
               completedCourses?.length === 0 && (
                 <div className="text-lg mx-4 text-red-700">
-                  There are no Courses available yet
+                  No Courses yet, Create your own
                 </div>
               )
             : enrolledCourses?.length === 0 &&
-              pendingCoursesEnduser?.length === 0 &&
               completedCourses?.length === 0 && (
                 <div className="text-lg mx-4 text-red-700">
-                  There are no Courses available yet
+                  No Courses yet, Enroll in one
                 </div>
               )}
         </>

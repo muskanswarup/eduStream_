@@ -25,7 +25,6 @@ contentRouter.put(
 contentRouter.delete(
   "/delete_content/:id",
   verifyToken,
-  verifyInstructor,
   deleteContent
 );
 

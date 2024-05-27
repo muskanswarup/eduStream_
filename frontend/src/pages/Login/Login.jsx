@@ -1,50 +1,21 @@
-import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import axios from "axios";
-import {
-  logInFailure,
-  logInStart,
-  logInSuccess,
-} from "../../redux/user/userSlice";
-import { useDispatch } from "react-redux";
+import useLoginForm from "../../hooks/useLoginForm";
 
-export default function Login({ render, setRender }) {
-  const navigate = useNavigate();
-  const dispatch = useDispatch();
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
-
-  const handleSubmit = async (e) => {
-    e.preventDefault();
-    dispatch(logInStart());
-    try {
-      const res = await axios.post(
-        "https://edu-stream-backend-delta.vercel.app/api/login",
-        { email, password },
-        {
-          headers: {
-            "Content-Type": "application/json",
-          },
-        }
-      );
-      const data = res.data;
-      if (data.success === false) {
-        dispatch(logInFailure(data.message));
-        return;
-      }
-      dispatch(logInSuccess(data));
-      setRender(!render);
-      navigate("/");
-    } catch (error) {
-      dispatch(logInFailure(error.message));
-    }
-  };
+export default function Login({ setRender }) {
+  const navigate = useNavigate()
+  const {
+    email,
+    password,
+    handleEmailChange,
+    handlePasswordChange,
+    handleSubmit,
+  } = useLoginForm(setRender);
 
   return (
     <div className="flex-1 flex items-center justify-center">
       <form
         onSubmit={handleSubmit}
-        className="p-4 flex flex-col gap-2  w-96 border bg-gray-100 rounded-lg border-gray-300"
+        className="p-4 flex flex-col gap-2 w-96 border bg-gray-100 rounded-lg border-gray-300"
       >
         <h2 className="text-2xl font-bold mb-4">Login</h2>
         <div className="mb-4">
@@ -58,7 +29,7 @@ export default function Login({ render, setRender }) {
             type="email"
             id="email"
             value={email}
-            onChange={(e) => setEmail(e.target.value)}
+            onChange={handleEmailChange}
             className="w-full px-4 py-2 border rounded-md focus:outline-none focus:border-blue-500"
             required
           />
@@ -74,7 +45,7 @@ export default function Login({ render, setRender }) {
             type="password"
             id="password"
             value={password}
-            onChange={(e) => setPassword(e.target.value)}
+            onChange={handlePasswordChange}
             className="w-full px-4 py-2 border rounded-md focus:outline-none focus:border-blue-500"
             required
           />

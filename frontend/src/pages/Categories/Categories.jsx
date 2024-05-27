@@ -1,26 +1,15 @@
-import axios from "axios";
 import React, { useEffect, useState } from "react";
-import CourseCard from "./CourseCard.jsx/CourseCard";
+import CategoriesCourseCard from "./CategoriesCourseCard/CategoriesCourseCard";
+import { getTags } from "../../services/tagServices";
 
 export default function Categories({ courseData, userData }) {
   const [tagsData, setTagsData] = useState([]);
-
   const [selectedTag, setSelectedTag] = useState([]);
 
   useEffect(() => {
     const fetchTags = async () => {
       try {
-        const token = localStorage.getItem("token");
-        const headers = {
-          "Content-Type": "application/json",
-          Authorization: `Bearer ${token}`,
-        };
-        const res = await axios.get("https://edu-stream-backend-delta.vercel.app/tag/get_tags", {
-          method: "GET",
-          headers: headers,
-        });
-        const data = res.data;
-
+        const data = await getTags();
         setTagsData(data);
       } catch (error) {
         console.log(error);
@@ -71,7 +60,7 @@ export default function Categories({ courseData, userData }) {
               )
             )
             .map((course) => (
-              <CourseCard
+              <CategoriesCourseCard
                 key={course._id}
                 userData={userData}
                 course={course}
@@ -81,7 +70,7 @@ export default function Categories({ courseData, userData }) {
       ) : courseData.length > 0 ? (
         <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 xl:grid-cols-4 2xl:grid-cols-5 gap-4 items-start">
           {courseData.map((course) => (
-            <CourseCard key={course._id} userData={userData} course={course} />
+            <CategoriesCourseCard key={course._id} userData={userData} course={course} />
           ))}
         </div>
       ) : (

@@ -1,12 +1,11 @@
 import React, { useEffect, useState } from "react";
-import { useDispatch, useSelector } from "react-redux";
-import CourseCard from "./CourseCard/CourseCard";
+import { useSelector } from "react-redux";
+import ProfileCourseCard from "./ProfileCourseCard/ProfileCourseCard";
 import UpArrow from "../../utils/icons/UpArrow";
 import DownArrow from "../../utils/icons/DownArrow";
 import EditIcon from "../../utils/icons/EditIcon";
 import SingleTickIcon from "../../utils/icons/SingleTickIcon";
-import axios from 'axios'
-import { logInSuccess } from "../../redux/user/userSlice";
+import { editUser } from "../../services/userServices";
 
 export default function Profile({ userData, setRender, render }) {
   const { currentUser } = useSelector((state) => state.user);
@@ -14,7 +13,7 @@ export default function Profile({ userData, setRender, render }) {
   const [showCompletedCourses, setShowCompletedCourses] = useState(true);
   const [editAboutMe, setEditAboutMe] = useState(false);
   const [aboutMe, setAboutMe] = useState(null);
-
+ 
   useEffect(() => {
     if (userData) {
       setCourseData(userData?.completed_courses?.slice(0, 3));
@@ -23,19 +22,9 @@ export default function Profile({ userData, setRender, render }) {
 
   const handleClick = async () => {
     if (editAboutMe === true) {
-      const token = localStorage.getItem("token");
-      const headers = {
-        "Content-Type": "application/json",
-        Authorization: `Bearer ${token}`,
-      };
       try {
-        const res = await axios.put(
-          `https://edu-stream-backend-delta.vercel.app/user/edit_user/${currentUser._id}`,
-          { aboutme: aboutMe },
-          { headers: headers }
-        );
-        
-        setAboutMe(res.data.aboutme);
+        const res = editUser(currentUser._id, aboutMe);
+        setAboutMe(res.aboutme);
         setEditAboutMe(false);
         setRender(!render);
       } catch (error) {
@@ -45,7 +34,7 @@ export default function Profile({ userData, setRender, render }) {
       setEditAboutMe(true);
     }
   };
-  
+
   return (
     <div className="flex-1 flex flex-col items-center m-2 sm:m-4">
       <div className="flex flex-col gap-2">
@@ -66,9 +55,21 @@ export default function Profile({ userData, setRender, render }) {
             </span>
           </div>
           <div className="flex flex-col items-center w-80">
-            <p className={`flex items-center justify-center text-sm border ${!editAboutMe && `p-2`} rounded-md mb-2`}>
-              {editAboutMe ? <input className="p-2 rounded-md" onChange={(e) => setAboutMe(e.target.value)}/> : userData.aboutme ? userData.aboutme :
-                 "Edit Your AboutMe"}
+            <p
+              className={`flex items-center justify-center text-sm border ${
+                !editAboutMe && `p-2`
+              } rounded-md mb-2`}
+            >
+              {editAboutMe ? (
+                <input
+                  className="p-2 rounded-md"
+                  onChange={(e) => setAboutMe(e.target.value)}
+                />
+              ) : userData.aboutme ? (
+                userData.aboutme
+              ) : (
+                "Edit Your AboutMe"
+              )}
             </p>
             {editAboutMe ? (
               <SingleTickIcon
@@ -102,7 +103,7 @@ export default function Profile({ userData, setRender, render }) {
           {showCompletedCourses && (
             <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 xl:grid-cols-4 2xl:grid-cols-5 gap-4 items-start">
               {courseData?.map((course) => (
-                <CourseCard key={course._id} course={course} />
+                <ProfileCourseCard key={course._id} course={course} />
               ))}
             </div>
           )}
