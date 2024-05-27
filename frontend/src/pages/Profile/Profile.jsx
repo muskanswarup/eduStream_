@@ -1,11 +1,12 @@
 import React, { useEffect, useState } from "react";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import CourseCard from "./CourseCard/CourseCard";
 import UpArrow from "../../utils/icons/UpArrow";
 import DownArrow from "../../utils/icons/DownArrow";
 import EditIcon from "../../utils/icons/EditIcon";
 import SingleTickIcon from "../../utils/icons/SingleTickIcon";
 import axios from 'axios'
+import { logInSuccess } from "../../redux/user/userSlice";
 
 export default function Profile({ userData, setRender, render }) {
   const { currentUser } = useSelector((state) => state.user);
@@ -36,6 +37,7 @@ export default function Profile({ userData, setRender, render }) {
         
         setAboutMe(res.data.aboutme);
         setEditAboutMe(false);
+        useDispatch(logInSuccess(res.data));
         setRender(!render);
       } catch (error) {
         console.log(error);
