@@ -5,7 +5,7 @@ import UpArrow from "../../utils/icons/UpArrow";
 import DownArrow from "../../utils/icons/DownArrow";
 import EditIcon from "../../utils/icons/EditIcon";
 import SingleTickIcon from "../../utils/icons/SingleTickIcon";
-import axios from 'axios'
+import axios from "axios";
 import { logInSuccess } from "../../redux/user/userSlice";
 
 export default function Profile({ userData, setRender, render }) {
@@ -13,7 +13,6 @@ export default function Profile({ userData, setRender, render }) {
   const [courseData, setCourseData] = useState([]);
   const [showCompletedCourses, setShowCompletedCourses] = useState(true);
   const [editAboutMe, setEditAboutMe] = useState(false);
-  const [aboutMe, setAboutMe] = useState(null);
 
   useEffect(() => {
     if (userData) {
@@ -34,10 +33,9 @@ export default function Profile({ userData, setRender, render }) {
           { aboutme: aboutMe },
           { headers: headers }
         );
-        
+
         setAboutMe(res.data.aboutme);
         setEditAboutMe(false);
-        useDispatch(logInSuccess(res.data));
         setRender(!render);
       } catch (error) {
         console.log(error);
@@ -46,7 +44,7 @@ export default function Profile({ userData, setRender, render }) {
       setEditAboutMe(true);
     }
   };
-  
+
   return (
     <div className="flex-1 flex flex-col items-center m-2 sm:m-4">
       <div className="flex flex-col gap-2">
@@ -67,10 +65,21 @@ export default function Profile({ userData, setRender, render }) {
             </span>
           </div>
           <div className="flex flex-col items-center w-80">
-            <p className={`flex items-center justify-center text-sm border ${!editAboutMe && `p-2`} rounded-md mb-2`}>
-              {editAboutMe ? <input className="p-2 rounded-md" onChange={(e) => setAboutMe(e.target.value)}/> : aboutMe
-                ? aboutMe
-                : currentUser.aboutme ? currentUser.aboutme : "Edit Your AboutMe"}
+            <p
+              className={`flex items-center justify-center text-sm border ${
+                !editAboutMe && `p-2`
+              } rounded-md mb-2`}
+            >
+              {editAboutMe ? (
+                <input
+                  className="p-2 rounded-md"
+                  onChange={(e) => setAboutMe(e.target.value)}
+                />
+              ) : userData.aboutme ? (
+                userData.aboutme
+              ) : (
+                "Edit Your AboutMe"
+              )}
             </p>
             {editAboutMe ? (
               <SingleTickIcon
