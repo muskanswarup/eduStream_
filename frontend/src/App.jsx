@@ -69,6 +69,7 @@ function App() {
     fetchUser();
   }, [render]);
 
+  console.log(userData);
   return (
     <>
       <BrowserRouter>
@@ -119,7 +120,10 @@ function App() {
                     />
                   }
                 />
-                <Route path="/profile" element={<Profile />} />
+                <Route
+                  path="/profile"
+                  element={<Profile userData={userData} render={render} setRender={setRender}/>}
+                />
               </Route>
               <Route element={<PrivateRouteAdmin />}>
                 <Route

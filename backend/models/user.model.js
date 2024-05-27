@@ -27,6 +27,10 @@ const userSchema = new mongoose.Schema({
     required: [true, "Please enter your role"],
   },
 
+  aboutme: {
+    type: String
+  },
+
   owned_courses: [
     {
       type: mongoose.Schema.Types.ObjectId,

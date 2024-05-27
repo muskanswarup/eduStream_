@@ -230,6 +230,7 @@ export default function MyCourses({ courseData, userData, setRender, render }) {
                       title={course?.title}
                       description={course?.description}
                       instructorName={course?.instructor.name}
+                      
                     />
                   ))}
                 </div>
@@ -265,6 +266,7 @@ export default function MyCourses({ courseData, userData, setRender, render }) {
                           title={course?.title}
                           description={course?.description}
                           instructorName={course?.instructor.name}
+                         
                         />
                       ))}
                     </div>
@@ -295,6 +297,7 @@ export default function MyCourses({ courseData, userData, setRender, render }) {
                           title={course?.title}
                           description={course?.description}
                           instructorName={course?.instructor.name}
+                          
                         />
                       ))}
                     </div>
@@ -329,6 +332,7 @@ export default function MyCourses({ courseData, userData, setRender, render }) {
                           title={course?.title}
                           description={course?.description}
                           instructorName={course?.instructor.name}
+                          
                         />
                       ))}
                     </div>
@@ -361,6 +365,7 @@ export default function MyCourses({ courseData, userData, setRender, render }) {
                           title={course?.title}
                           description={course?.description}
                           instructorName={course?.instructor.name}
+                          
                         />
                       ))}
                     </div>

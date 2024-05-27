@@ -28,6 +28,30 @@ const getAllUsers = async (req, res, next) => {
   }
 };
 
+const editUser = async (req, res, next) => {
+  try {
+    const userId = req.params.id;
+
+    const user = await userModel.findByIdAndUpdate(
+      userId,
+      {
+        $set: {
+          aboutme: req.body.aboutme,
+        },
+      },
+      { new: true }
+    );
+
+    if (!user) {
+      return res.status(404).json({ message: "User not found" });
+    }
+
+    res.status(200).json(user);
+  } catch (error) {
+    next(error);
+  }
+};
+
 const deleteUser = async (req, res, next) => {
   try {
     const userId = req.params.id;
@@ -105,4 +129,4 @@ const deleteUser = async (req, res, next) => {
   }
 };
 
-export { getUser, getAllUsers, deleteUser };
+export { getUser, getAllUsers, deleteUser, editUser };

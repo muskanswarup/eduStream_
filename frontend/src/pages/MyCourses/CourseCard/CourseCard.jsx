@@ -28,8 +28,10 @@ export default function CourseCard({ id, title, description, instructorName }) {
           <p className="line-clamp-3 text-xs text-left">{description}</p>
         </div>
         <h3
-          className={`text-sm text-left ${
-            instructorName === currentUser.name ? "text-green-700" : "text-purple-700"
+          className={`text-sm text-left font-semibold ${
+            instructorName === currentUser.name
+              ? "text-green-700"
+              : "text-purple-700"
           }`}
         >
           {instructorName === currentUser.name ? "me" : instructorName}
