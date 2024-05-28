@@ -18,24 +18,6 @@ const getAllCourses = async (req, res, next) => {
   }
 };
 
-const getMyCourses = async (req, res, next) => {
-  try {
-    const userId = req.user.id;
-    const user = await userModel
-      .findById(userId)
-      .populate("owned_courses")
-      .populate("enrolled_courses");
-
-    const ownedCourses = user.owned_courses;
-    const enrolledCourses = user.enrolled_courses;
-
-    if (user.role === "instructor") res.status(200).json(ownedCourses);
-    if (user.role === "enduser") res.status(200).json(enrolledCourses);
-  } catch (error) {
-    next(error);
-  }
-};
-
 const getCourse = async (req, res, next) => {
   try {
     const id = req.params.id;
@@ -199,12 +181,18 @@ const deleteCourse = async (req, res, next) => {
         await user.save();
       })
     );
+ 
+    const courseToDel = await courseModel.findById(courseId).populate('course_content');
+
+    await Promise.all(courseToDel.course_content.map(async (content) => {
+      await content.remove(); 
+    }));
 
     const usersToUpdateIds = usersToUpdate.map((user) => user._id);
-    const course = await courseModel.findByIdAndDelete(courseId);
+    await courseModel.findByIdAndDelete(courseId);
     res.status(200).json({
       message: "Course deleted successfully",
-      course,
+      courseToDel,
       users: usersToUpdateIds,
     });
   } catch (error) {
@@ -215,7 +203,6 @@ const deleteCourse = async (req, res, next) => {
 export {
   createCourse,
   getAllCourses,
-  getMyCourses,
   getCourse,
   enrollCourse,
   completeCourse,

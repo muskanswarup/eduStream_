@@ -8,14 +8,12 @@ import {
   enrollCourse,
   getAllCourses,
   getCourse,
-  getMyCourses,
 } from "../controllers/course.controller.js";
 import { verifyEnduser } from "../utils/verifyEnduser.js";
 
 const courseRouter = express.Router();
 
 courseRouter.get("/get_courses", verifyToken, getAllCourses);
-courseRouter.get("/get_my_courses", verifyToken, getMyCourses);
 courseRouter.post(
   "/create_course",
   verifyToken,

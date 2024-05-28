@@ -246,6 +246,7 @@ export default function Course({ courseData, userData, setRender }) {
                   setRender={setRender}
                   courseData={courseData}
                   courseId={courseId}
+                  userData={userData}
                 />
               ))}
             {courseData?.course_content?.length == 0 && (

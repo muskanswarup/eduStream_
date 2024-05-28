@@ -13,6 +13,7 @@ export default function CourseCourseCard({
   setRender,
   courseData,
   courseId,
+  userData
 }) {
   const { currentUser } = useSelector((state) => state.user);
 
@@ -27,7 +28,7 @@ export default function CourseCourseCard({
         method: "DELETE",
         headers: headers,
       });
-      setRender(!render);
+      setRender((prevRender) => !prevRender);
     } catch (error) {
       console.log(error);
     }
@@ -53,6 +54,8 @@ export default function CourseCourseCard({
       console.log(error);
     }
   };
+  console.log(courseData);
+  console.log(userData);
   return (
     <div
       key={content._id}
@@ -67,7 +70,7 @@ export default function CourseCourseCard({
       ></iframe>
       <div className="flex justify-between items-center">
         <h3 className="font-semibold text-md">{content.title}</h3>
-        {currentUser._id === courseData.instructor && (
+        {currentUser.role === "instructor" && userData.owned_courses.find((course) => course._id === courseId) && (
           <div className=" group relative">
             <DeleteIcon
               className="text-red-700"
