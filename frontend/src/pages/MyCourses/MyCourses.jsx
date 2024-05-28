@@ -227,6 +227,9 @@ export default function MyCourses({ courseData, userData, setRender }) {
                       description={course?.description}
                       instructorName={course?.instructor.name}
                       avatar={course.avatar}
+                      userData={userData}
+                      setRender={setRender}
+
                     />
                   ))}
                 </div>
@@ -263,6 +266,10 @@ export default function MyCourses({ courseData, userData, setRender }) {
                         description={course?.description}
                         instructorName={course?.instructor.name}
                         avatar={course.avatar}
+                      userData={userData}
+                      setRender={setRender}
+
+
                       />
                     ))}
                   </div>
@@ -298,6 +305,10 @@ export default function MyCourses({ courseData, userData, setRender }) {
                           description={course?.description}
                           instructorName={course?.instructor.name}
                           avatar={course.avatar}
+                      userData={userData}
+                      setRender={setRender}
+
+
                         />
                       ))}
                     </div>
@@ -331,6 +342,9 @@ export default function MyCourses({ courseData, userData, setRender }) {
                           description={course?.description}
                           instructorName={course?.instructor.name}
                           avatar={course.avatar}
+                      userData={userData}
+                      setRender={setRender}
+
                         />
                       ))}
                     </div>
