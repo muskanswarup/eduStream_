@@ -1,7 +1,7 @@
 import axios from "axios";
 
 const apiClient = axios.create({
-  baseURL: "https://edu-stream-backend-delta.vercel.app/user",
+  baseURL: "http://localhost:4000/user",
   headers: {
     "Content-Type": "application/json",
   },

@@ -13,7 +13,7 @@ export default function UserCard({ user, render, setRender }) {
       Authorization: `Bearer ${token}`,
     };
     try {
-      await axios.delete(`https://edu-stream-backend-delta.vercel.app/user/delete_user/${user._id}`, {
+      await axios.delete(`http://localhost:4000/user/delete_user/${user._id}`, {
         method: "DELETE",
         headers: headers,
       });

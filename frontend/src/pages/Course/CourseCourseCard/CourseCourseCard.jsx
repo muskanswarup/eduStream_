@@ -24,7 +24,7 @@ export default function CourseCourseCard({
       Authorization: `Bearer ${token}`,
     };
     try {
-      await axios.delete(`https://edu-stream-backend-delta.vercel.app/content/delete_content/${id}`, {
+      await axios.delete(`http://localhost:4000/content/delete_content/${id}`, {
         method: "DELETE",
         headers: headers,
       });
@@ -42,7 +42,7 @@ export default function CourseCourseCard({
         Authorization: `Bearer ${token}`,
       };
       await axios.put(
-        `https://edu-stream-backend-delta.vercel.app/content/watched_content/${id}`,
+        `http://localhost:4000/content/watched_content/${id}`,
         {},
         {
           method: "PUT",

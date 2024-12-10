@@ -21,7 +21,7 @@ export default function Signup() {
     dispatch(signInStart());
     try {
       const res = await axios.post(
-        "https://edu-stream-backend-delta.vercel.app/api/signup",
+        "http://localhost:4000/api/signup",
         { name, email, password, role },
         {
           headers: {

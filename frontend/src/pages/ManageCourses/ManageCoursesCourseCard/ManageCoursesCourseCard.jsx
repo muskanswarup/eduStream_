@@ -26,7 +26,7 @@ export default function ManageCoursesCourseCard({ course, render, setRender }) {
     };
     try {
       await axios.delete(
-        `https://edu-stream-backend-delta.vercel.app/course/delete_course/${course._id}`,
+        `http://localhost:4000/course/delete_course/${course._id}`,
         {
           method: "DELETE",
           headers: headers,

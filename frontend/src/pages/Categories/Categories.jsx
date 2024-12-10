@@ -15,7 +15,7 @@ export default function Categories({ courseData, userData }) {
           "Content-Type": "application/json",
           Authorization: `Bearer ${token}`,
         };
-        const res = await axios.get("https://edu-stream-backend-delta.vercel.app/tag/get_tags", {
+        const res = await axios.get("http://localhost:4000/tag/get_tags", {
           method: "GET",
           headers: headers,
         });

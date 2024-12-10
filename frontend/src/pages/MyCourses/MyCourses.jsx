@@ -85,7 +85,7 @@ export default function MyCourses({ courseData, userData, setRender }) {
     };
     try {
       await axios.post(
-        "https://edu-stream-backend-delta.vercel.app/course/create_course",
+        "http://localhost:4000/course/create_course",
         data,
         {
           method: "POST",

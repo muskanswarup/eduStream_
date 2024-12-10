@@ -11,7 +11,7 @@ import { tagRouter } from "./routes/tag.route.js";
 const app = express();
 
 const cors_options = {
-  origin: "https://edu-stream-frontend.vercel.app",
+  origin: 'http://localhost:5174',
   methods: ["GET", "POST", "PUT", "PATCH", "DELETE"],
   credentials: true,
 };

@@ -22,7 +22,7 @@ export default function ManageUsers({ render, setRender }) {
           Authorization: `Bearer ${token}`,
         };
         const res = await axios.get(
-          "https://edu-stream-backend-delta.vercel.app/user/get_all_users",
+          "http://localhost:4000/user/get_all_users",
           {
             headers: headers,
           }

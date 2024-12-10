@@ -30,7 +30,7 @@ export default function Profile({ userData, setRender, render }) {
       };
       try {
         const res = await axios.put(
-          `https://edu-stream-backend-delta.vercel.app/user/edit_user/${currentUser._id}`,
+          `http://localhost:4000/user/edit_user/${currentUser._id}`,
           { aboutme: aboutMe },
           { headers: headers }
         );

@@ -28,7 +28,7 @@ export default function MyCoursesCourseCard({
       Authorization: `Bearer ${token}`,
     };
     try {
-      await axios.delete(`https://edu-stream-backend-delta.vercel.app/course/delete_course/${id}`, {
+      await axios.delete(`http://localhost:4000/course/delete_course/${id}`, {
         method: "DELETE",
         headers: headers,
       });
